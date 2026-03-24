@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -18,11 +18,30 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "MoMoParse · SikaFlow",
-    template: "%s · MoMoParse",
+    default: "Sika FLOW",
+    template: "%s · Sika FLOW",
   },
   description:
-    "SMS Mobile Money parsing API for West Africa — MTN, Moov, Celtiis. Dashboard & public API for SikaFlow.",
+    "Analytics et API Mobile Money — MTN, Moov, Celtiis. Design clair, accent citron #DFFF00.",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Sika FLOW",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#dfff00" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
 };
 
 export default function RootLayout({
@@ -32,7 +51,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="fr"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">

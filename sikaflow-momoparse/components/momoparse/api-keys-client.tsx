@@ -21,6 +21,9 @@ function TrashIcon() {
   );
 }
 
+const btnLime =
+  "rounded-full bg-[#DFFF00] px-5 py-2.5 text-sm font-bold text-black transition-colors hover:bg-[#c8e600]";
+
 export function ApiKeysClient({ initialKeys }: { initialKeys: KeyRow[] }) {
   const [keys, setKeys] = useState(initialKeys);
   const [modalOpen, setModalOpen] = useState(false);
@@ -85,14 +88,10 @@ export function ApiKeysClient({ initialKeys }: { initialKeys: KeyRow[] }) {
 
   if (keys.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-[8px] border border-dashed border-white/[0.12] bg-mp-surface px-6 py-16 text-center">
-        <p className="text-sm text-white/55">Aucune clé API</p>
-        <button
-          type="button"
-          onClick={openNew}
-          className="mt-4 rounded-[8px] bg-[#FF6B35] px-4 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-[#E55A2A]"
-        >
-          Create your first API key
+      <div className="flex flex-col items-center justify-center rounded-[var(--radius-mp-inner)] border border-dashed border-mp-border bg-mp-surface px-6 py-16 text-center sf-card-shadow">
+        <p className="text-sm font-medium text-mp-muted">Aucune clé API</p>
+        <button type="button" onClick={openNew} className={`mt-4 ${btnLime}`}>
+          Créer votre première clé
         </button>
       </div>
     );
@@ -101,55 +100,49 @@ export function ApiKeysClient({ initialKeys }: { initialKeys: KeyRow[] }) {
   return (
     <div className="space-y-4">
       <div className="flex justify-end">
-        <button
-          type="button"
-          onClick={openNew}
-          className="rounded-[8px] bg-[#FF6B35] px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-[#E55A2A]"
-        >
-          New API key
+        <button type="button" onClick={openNew} className={btnLime}>
+          Nouvelle clé API
         </button>
       </div>
 
-      <div className="overflow-hidden rounded-[8px] border border-white/[0.08] bg-mp-surface">
+      <div className="overflow-hidden rounded-[var(--radius-mp-inner)] border border-mp-border bg-mp-surface sf-card-shadow">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[720px] border-collapse text-left text-sm">
             <thead>
-              <tr className="border-b border-white/[0.08] font-mono text-[10px] uppercase tracking-wider text-white/45">
-                <th className="px-4 py-2 font-medium">Name</th>
-                <th className="px-4 py-2 font-medium">Prefix</th>
-                <th className="px-4 py-2 font-medium">Scopes</th>
-                <th className="px-4 py-2 font-medium">Last used</th>
-                <th className="px-4 py-2 font-medium">Status</th>
-                <th className="px-4 py-2 font-medium">Actions</th>
+              <tr className="border-b border-mp-border text-[10px] font-bold uppercase tracking-wider text-mp-muted">
+                <th className="px-4 py-3 font-bold">Nom</th>
+                <th className="px-4 py-3 font-bold">Préfixe</th>
+                <th className="px-4 py-3 font-bold">Scopes</th>
+                <th className="px-4 py-3 font-bold">Dernière utilisation</th>
+                <th className="px-4 py-3 font-bold">Statut</th>
+                <th className="px-4 py-3 font-bold">Actions</th>
               </tr>
             </thead>
             <tbody>
               {keys.map((k) => (
                 <tr
                   key={k.id}
-                  className="border-b border-white/[0.06] transition-colors hover:bg-white/[0.03]"
+                  className="border-b border-mp-border transition-colors hover:bg-mp-bg"
                 >
-                  <td className="px-4 py-2.5 font-medium text-white/[0.92]">{k.name}</td>
-                  <td className="px-4 py-2.5 font-mono text-xs text-white/55">{k.prefix}</td>
-                  <td className="px-4 py-2.5 font-mono text-[11px] text-white/45">
-                    {k.scopes.join(", ")}
-                  </td>
-                  <td className="px-4 py-2.5 text-xs text-white/55">{k.lastUsed}</td>
-                  <td className="px-4 py-2.5">
+                  <td className="px-4 py-3 font-bold text-mp-text">{k.name}</td>
+                  <td className="px-4 py-3 font-mono text-xs text-mp-muted">{k.prefix}</td>
+                  <td className="px-4 py-3 font-mono text-[11px] text-mp-muted">{k.scopes.join(", ")}</td>
+                  <td className="px-4 py-3 text-xs text-mp-muted">{k.lastUsed}</td>
+                  <td className="px-4 py-3">
                     <span
-                      className={`rounded-[6px] border px-2 py-0.5 text-[10px] font-mono uppercase ${
+                      className={`rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase ${
                         k.active
-                          ? "border-[#00C48C]/35 bg-[#00C48C]/15 text-[#00C48C]"
-                          : "border-white/15 bg-white/5 text-white/45"
+                          ? "border-emerald-200 bg-emerald-50 text-emerald-800"
+                          : "border-mp-border bg-mp-bg text-mp-muted"
                       }`}
                     >
                       {k.active ? "Active" : "Inactive"}
                     </span>
                   </td>
-                  <td className="px-4 py-2.5">
+                  <td className="px-4 py-3">
                     <button
                       type="button"
-                      className="text-white/45 transition-colors hover:text-[#FF5C5C]"
+                      className="text-mp-muted transition-colors hover:text-red-600"
                       aria-label="Révoquer"
                       onClick={() => setKeys((prev) => prev.filter((x) => x.id !== k.id))}
                     >
@@ -166,15 +159,11 @@ export function ApiKeysClient({ initialKeys }: { initialKeys: KeyRow[] }) {
       <Modal
         open={modalOpen}
         onClose={step === "reveal" ? () => {} : closeModal}
-        title={step === "form" ? "New API key" : "Your API key"}
+        title={step === "form" ? "Nouvelle clé API" : "Votre clé API"}
         footer={
           step === "reveal" ? (
-            <button
-              type="button"
-              onClick={confirmCopied}
-              className="w-full rounded-[8px] bg-[#FF6B35] py-2.5 text-sm font-semibold text-black transition-colors hover:bg-[#E55A2A]"
-            >
-              I&apos;ve copied this key
+            <button type="button" onClick={confirmCopied} className={`w-full ${btnLime}`}>
+              J&apos;ai copié cette clé
             </button>
           ) : null
         }
@@ -182,23 +171,23 @@ export function ApiKeysClient({ initialKeys }: { initialKeys: KeyRow[] }) {
         {step === "form" && (
           <div className="space-y-4">
             <div>
-              <label className="block text-[10px] font-mono uppercase tracking-widest text-white/45">
-                Key name
+              <label className="block text-[10px] font-bold uppercase tracking-widest text-mp-muted">
+                Nom de la clé
               </label>
               <input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Restafy Production"
-                className="mt-1.5 h-10 w-full rounded-[8px] border border-white/[0.08] bg-mp-bg px-3 text-sm outline-none focus:border-[#FF6B35]/50"
+                className="mt-1.5 h-11 w-full rounded-full border border-mp-border bg-mp-bg px-4 text-sm font-medium outline-none focus:ring-2 focus:ring-[#DFFF00]/60"
               />
             </div>
             <div className="space-y-2">
-              <p className="text-[10px] font-mono uppercase tracking-widest text-white/45">Scopes</p>
-              <label className="flex items-center gap-2 text-sm text-white/70">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-mp-muted">Scopes</p>
+              <label className="flex items-center gap-2 text-sm font-medium text-mp-text">
                 <input type="checkbox" checked={readTx} onChange={(e) => setReadTx(e.target.checked)} />
                 read:transactions
               </label>
-              <label className="flex items-center gap-2 text-sm text-white/70">
+              <label className="flex items-center gap-2 text-sm font-medium text-mp-text">
                 <input type="checkbox" checked={writeTx} onChange={(e) => setWriteTx(e.target.checked)} />
                 write:transactions
               </label>
@@ -207,32 +196,30 @@ export function ApiKeysClient({ initialKeys }: { initialKeys: KeyRow[] }) {
               type="button"
               disabled={busy || (!readTx && !writeTx)}
               onClick={generate}
-              className="flex h-10 w-full items-center justify-center rounded-[8px] bg-[#FF6B35] text-sm font-semibold text-black transition-colors hover:bg-[#E55A2A] disabled:opacity-50"
+              className={`flex h-11 w-full items-center justify-center ${btnLime} disabled:opacity-50`}
             >
               {busy ? (
                 <span className="h-4 w-4 animate-spin rounded-full border-2 border-black/30 border-t-black" />
               ) : (
-                "Generate key"
+                "Générer la clé"
               )}
             </button>
           </div>
         )}
         {step === "reveal" && (
           <div className="space-y-3">
-            <p className="text-sm text-[#FF6B35]">
+            <p className="text-sm font-semibold text-mp-text">
               Cette clé ne sera plus affichée. Copiez-la maintenant.
             </p>
-            <div className="flex gap-2">
-              <pre className="flex-1 overflow-x-auto rounded-[8px] border border-white/[0.08] bg-[#0C0C0C] p-3 font-mono text-xs text-white/80">
-                {generated}
-              </pre>
-            </div>
+            <pre className="overflow-x-auto rounded-[var(--radius-mp-inner)] border border-mp-border bg-mp-bg p-3 font-mono text-xs text-mp-text">
+              {generated}
+            </pre>
             <button
               type="button"
               onClick={copyKey}
-              className="w-full rounded-[8px] border border-white/[0.08] py-2 text-sm text-white/80 transition-colors hover:border-[#FF6B35]/40 hover:text-[#FF6B35]"
+              className="w-full rounded-full border border-mp-border py-2.5 text-sm font-bold text-mp-text transition-colors hover:border-black hover:bg-[#DFFF00]/20"
             >
-              Copy
+              Copier
             </button>
           </div>
         )}

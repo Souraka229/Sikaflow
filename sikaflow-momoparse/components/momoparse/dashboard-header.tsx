@@ -1,70 +1,90 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { PlanBadge } from "@/components/momoparse/badge";
 
 export function DashboardHeader({ plan = "PRO" }: { plan?: "PRO" | "FREE" }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="flex h-14 shrink-0 items-center justify-between border-b border-white/[0.08] px-4 md:px-6">
-      <div className="flex items-center gap-3">
-        <span className="font-mono text-lg font-semibold tracking-tight text-white/[0.92]">
-          MoMoParse
-        </span>
-        <PlanBadge plan={plan} />
-      </div>
-      <div className="relative">
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          className="flex items-center gap-2 rounded-[8px] border border-white/[0.08] bg-mp-surface px-2 py-1.5 text-left transition-colors hover:border-white/[0.12]"
-          aria-expanded={open}
-          aria-haspopup="menu"
-        >
-          <span className="flex h-8 w-8 items-center justify-center rounded-[6px] bg-[#FF6B35]/20 font-mono text-xs font-bold text-[#FF6B35]">
-            SK
-          </span>
-          <span className="hidden text-sm text-white/70 sm:block">SikaFlow</span>
-          <svg
-            className="h-4 w-4 text-white/40"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            aria-hidden
+    <header className="sf-card-shadow shrink-0 border-b border-mp-border bg-mp-surface px-4 py-4 md:px-6">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          <p className="text-xs font-semibold uppercase tracking-wide text-mp-muted">Sika FLOW</p>
+          <div className="mt-1 flex flex-wrap items-center gap-2">
+            <h1 className="text-2xl font-bold tracking-tight text-mp-text md:text-3xl">
+              Vos analytics
+            </h1>
+            <PlanBadge plan={plan} />
+          </div>
+        </div>
+        <div className="flex shrink-0 items-center gap-2">
+          <Link
+            href="/dashboard/transactions"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-mp-border bg-mp-bg text-mp-text transition-colors hover:bg-neutral-100"
+            aria-label="Rechercher"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-          </svg>
-        </button>
-        {open && (
-          <>
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </Link>
+          <div className="relative">
             <button
               type="button"
-              className="fixed inset-0 z-40 cursor-default bg-transparent"
-              aria-label="Fermer le menu"
-              onClick={() => setOpen(false)}
-            />
-            <div
-              role="menu"
-              className="absolute right-0 top-full z-50 mt-1 w-48 rounded-[8px] border border-white/[0.08] bg-[#141414] py-1 shadow-none"
+              onClick={() => setOpen((v) => !v)}
+              className="flex h-11 items-center gap-2 rounded-full border border-mp-border bg-mp-bg pl-1 pr-3 transition-colors hover:bg-neutral-100"
+              aria-expanded={open}
+              aria-haspopup="menu"
             >
-              <button
-                type="button"
-                role="menuitem"
-                className="block w-full px-3 py-2 text-left text-sm text-white/80 hover:bg-white/[0.05]"
-              >
-                Profil
-              </button>
-              <button
-                type="button"
-                role="menuitem"
-                className="block w-full px-3 py-2 text-left text-sm text-white/80 hover:bg-white/[0.05]"
-              >
-                Déconnexion
-              </button>
-            </div>
-          </>
-        )}
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-black text-xs font-bold text-[#DFFF00]">
+                SF
+              </span>
+              <svg className="h-4 w-4 text-mp-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            {open && (
+              <>
+                <button
+                  type="button"
+                  className="fixed inset-0 z-40 cursor-default bg-transparent"
+                  aria-label="Fermer le menu"
+                  onClick={() => setOpen(false)}
+                />
+                <div
+                  role="menu"
+                  className="sf-card-shadow absolute right-0 top-full z-50 mt-2 w-52 overflow-hidden rounded-[var(--radius-mp-inner)] border border-mp-border bg-mp-surface py-1"
+                >
+                  <Link
+                    href="/"
+                    role="menuitem"
+                    className="block px-4 py-2.5 text-sm text-mp-text hover:bg-mp-bg"
+                    onClick={() => setOpen(false)}
+                  >
+                    Site vitrine
+                  </Link>
+                  <Link
+                    href="/dashboard/api-keys"
+                    role="menuitem"
+                    className="block px-4 py-2.5 text-sm text-mp-text hover:bg-mp-bg"
+                    onClick={() => setOpen(false)}
+                  >
+                    Clés API
+                  </Link>
+                  <Link
+                    href="/login"
+                    role="menuitem"
+                    className="block px-4 py-2.5 text-sm text-mp-text hover:bg-mp-bg"
+                    onClick={() => setOpen(false)}
+                  >
+                    Déconnexion (démo)
+                  </Link>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
       </div>
     </header>
   );

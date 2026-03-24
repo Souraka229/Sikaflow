@@ -4,9 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const items = [
-  { href: "/dashboard", label: "Home", Icon: IconGrid },
+  { href: "/dashboard", label: "Accueil", Icon: IconGrid },
   { href: "/dashboard/transactions", label: "Tx", Icon: IconList },
-  { href: "/dashboard/api-keys", label: "Keys", Icon: IconKey },
+  { href: "/dashboard/api-keys", label: "Clés", Icon: IconKey },
   { href: "/dashboard/devices", label: "Devices", Icon: IconPhone },
   { href: "/dashboard/docs", label: "Docs", Icon: IconBook },
 ];
@@ -14,10 +14,10 @@ const items = [
 function IconGrid(props: { className?: string }) {
   return (
     <svg className={props.className} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <rect x="3" y="3" width="7" height="7" rx="1" />
-      <rect x="14" y="3" width="7" height="7" rx="1" />
-      <rect x="3" y="14" width="7" height="7" rx="1" />
-      <rect x="14" y="14" width="7" height="7" rx="1" />
+      <rect x="3" y="3" width="7" height="7" rx="2" />
+      <rect x="14" y="3" width="7" height="7" rx="2" />
+      <rect x="3" y="14" width="7" height="7" rx="2" />
+      <rect x="14" y="14" width="7" height="7" rx="2" />
     </svg>
   );
 }
@@ -62,8 +62,8 @@ export function BottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-30 flex border-t border-white/[0.08] bg-mp-bg pb-[env(safe-area-inset-bottom)] md:hidden"
-      aria-label="Navigation principale"
+      className="sf-card-shadow fixed bottom-0 left-0 right-0 z-30 mx-3 mb-3 flex overflow-hidden rounded-[var(--radius-mp-inner)] border border-mp-border bg-mp-surface pb-[env(safe-area-inset-bottom)] pt-1 md:hidden"
+      aria-label="Navigation"
     >
       {items.map(({ href, label, Icon }) => {
         const active =
@@ -72,11 +72,17 @@ export function BottomNav() {
           <Link
             key={href}
             href={href}
-            className={`flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px] font-mono uppercase tracking-wide transition-colors ${
-              active ? "text-[#FF6B35]" : "text-white/45"
+            className={`flex flex-1 flex-col items-center gap-0.5 py-2 text-[9px] font-bold uppercase tracking-wide ${
+              active ? "text-black" : "text-mp-muted"
             }`}
           >
-            <Icon className={active ? "text-[#FF6B35]" : "text-white/45"} />
+            <span
+              className={`flex h-9 w-9 items-center justify-center rounded-full ${
+                active ? "bg-[#DFFF00]" : ""
+              }`}
+            >
+              <Icon className={active ? "text-black" : "text-mp-muted"} />
+            </span>
             {label}
           </Link>
         );

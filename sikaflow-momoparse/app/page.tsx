@@ -4,13 +4,13 @@ import { SiteFooter } from "@/components/landing/site-footer";
 import { SiteHeader } from "@/components/landing/site-header";
 
 export const metadata: Metadata = {
-  title: "MoMoParse — SMS Mobile Money → API structurée",
+  title: "Sika FLOW — Analytics & API Mobile Money",
   description:
-    "Parsez MTN MoMo, Moov Money et Celtiis. API REST, dashboard temps réel, clés API et devices. SikaFlow · Afrique de l'Ouest.",
+    "Parsez MTN, Moov, Celtiis. Dashboard type fintech clair, accent citron, API X-Api-Key. Afrique de l'Ouest.",
   openGraph: {
-    title: "MoMoParse — SMS Mobile Money → API structurée",
+    title: "Sika FLOW — Analytics & API Mobile Money",
     description:
-      "Ingestion sécurisée, parsing multi-opérateurs, API publique X-Api-Key. Pour les équipes produit en Afrique de l'Ouest.",
+      "Interface claire, cartes Bento, volume et transactions en direct — même esprit que votre maquette produit.",
     type: "website",
   },
 };

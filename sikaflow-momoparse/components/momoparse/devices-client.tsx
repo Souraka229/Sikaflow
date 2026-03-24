@@ -14,10 +14,13 @@ type Device = {
 };
 
 function statusFromMin(m: number) {
-  if (m < 5) return { dot: "bg-[#00C48C]", label: `Last ping: il y a ${m} min` };
-  if (m < 60) return { dot: "bg-[#FF6B35]", label: `Last ping: il y a ${m} min` };
-  return { dot: "bg-[#FF5C5C]", label: `Last ping: il y a ${m} min` };
+  if (m < 5) return { dot: "bg-emerald-500", label: `Dernier ping : il y a ${m} min` };
+  if (m < 60) return { dot: "bg-amber-500", label: `Dernier ping : il y a ${m} min` };
+  return { dot: "bg-red-500", label: `Dernier ping : il y a ${m} min` };
 }
+
+const btnLime =
+  "rounded-full bg-[#DFFF00] px-5 py-2.5 text-sm font-bold text-black transition-colors hover:bg-[#c8e600]";
 
 export function DevicesClient({ initialDevices }: { initialDevices: Device[] }) {
   const [devices, setDevices] = useState(initialDevices);
@@ -76,12 +79,8 @@ export function DevicesClient({ initialDevices }: { initialDevices: Device[] }) 
   return (
     <div className="space-y-4">
       <div className="flex justify-end">
-        <button
-          type="button"
-          onClick={openAdd}
-          className="rounded-[8px] bg-[#FF6B35] px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-[#E55A2A]"
-        >
-          Add device
+        <button type="button" onClick={openAdd} className={btnLime}>
+          Ajouter un appareil
         </button>
       </div>
 
@@ -91,29 +90,27 @@ export function DevicesClient({ initialDevices }: { initialDevices: Device[] }) 
           return (
             <div
               key={d.id}
-              className="rounded-[8px] border border-white/[0.08] bg-mp-surface p-4 transition-colors hover:border-white/[0.12]"
+              className="rounded-[var(--radius-mp-inner)] border border-mp-border bg-mp-surface p-5 transition-shadow sf-card-shadow hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]"
             >
               <div className="flex items-start justify-between gap-2">
                 <div>
-                  <h3 className="font-semibold text-white/[0.92]">{d.name}</h3>
+                  <h3 className="font-bold text-mp-text">{d.name}</h3>
                   <div className="mt-2 flex flex-wrap gap-1.5">
                     {d.operators.map((op) => (
                       <OperatorBadge key={op} op={op} />
                     ))}
                   </div>
                 </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  <span className={`h-2.5 w-2.5 rounded-full ${st.dot}`} />
-                </div>
+                <span className={`h-3 w-3 shrink-0 rounded-full ${st.dot}`} />
               </div>
-              <p className="mt-3 text-xs text-white/45">{st.label}</p>
-              <p className="mt-1 font-mono text-[11px] text-white/35">{d.deviceId}</p>
+              <p className="mt-3 text-xs font-medium text-mp-muted">{st.label}</p>
+              <p className="mt-1 font-mono text-[11px] text-mp-muted">{d.deviceId}</p>
               <button
                 type="button"
                 onClick={() => setWarnOpen(true)}
-                className="mt-4 w-full rounded-[8px] border border-white/[0.08] py-2 text-xs font-mono uppercase tracking-wide text-white/55 transition-colors hover:border-[#FF6B35]/40 hover:text-[#FF6B35]"
+                className="mt-4 w-full rounded-full border border-mp-border py-2.5 text-xs font-bold uppercase tracking-wide text-mp-muted transition-colors hover:border-black hover:text-mp-text"
               >
-                Regenerate secret
+                Régénérer le secret
               </button>
             </div>
           );
@@ -123,15 +120,11 @@ export function DevicesClient({ initialDevices }: { initialDevices: Device[] }) 
       <Modal
         open={addOpen}
         onClose={step === "secret" ? () => {} : closeAdd}
-        title={step === "form" ? "Add device" : "Device secret"}
+        title={step === "form" ? "Nouvel appareil" : "Secret appareil"}
         footer={
           step === "secret" ? (
-            <button
-              type="button"
-              onClick={closeAdd}
-              className="w-full rounded-[8px] bg-[#FF6B35] py-2.5 text-sm font-semibold text-black hover:bg-[#E55A2A]"
-            >
-              Done
+            <button type="button" onClick={closeAdd} className={`w-full ${btnLime}`}>
+              Terminé
             </button>
           ) : null
         }
@@ -139,29 +132,29 @@ export function DevicesClient({ initialDevices }: { initialDevices: Device[] }) 
         {step === "form" && (
           <div className="space-y-4">
             <div>
-              <label className="block text-[10px] font-mono uppercase tracking-widest text-white/45">
-                Device name
+              <label className="block text-[10px] font-bold uppercase tracking-widest text-mp-muted">
+                Nom de l&apos;appareil
               </label>
               <input
                 value={dname}
                 onChange={(e) => setDname(e.target.value)}
                 placeholder="Caisse principale"
-                className="mt-1.5 h-10 w-full rounded-[8px] border border-white/[0.08] bg-mp-bg px-3 text-sm outline-none focus:border-[#FF6B35]/50"
+                className="mt-1.5 h-11 w-full rounded-full border border-mp-border bg-mp-bg px-4 text-sm outline-none focus:ring-2 focus:ring-[#DFFF00]/50"
               />
             </div>
             <div className="space-y-2">
-              <p className="text-[10px] font-mono uppercase tracking-widest text-white/45">
-                Opérateurs assignés
+              <p className="text-[10px] font-bold uppercase tracking-widest text-mp-muted">
+                Opérateurs
               </p>
-              <label className="flex items-center gap-2 text-sm text-white/70">
+              <label className="flex items-center gap-2 text-sm font-medium text-mp-text">
                 <input type="checkbox" checked={mtn} onChange={(e) => setMtn(e.target.checked)} />
                 MTN
               </label>
-              <label className="flex items-center gap-2 text-sm text-white/70">
+              <label className="flex items-center gap-2 text-sm font-medium text-mp-text">
                 <input type="checkbox" checked={moov} onChange={(e) => setMoov(e.target.checked)} />
                 Moov
               </label>
-              <label className="flex items-center gap-2 text-sm text-white/70">
+              <label className="flex items-center gap-2 text-sm font-medium text-mp-text">
                 <input type="checkbox" checked={celtiis} onChange={(e) => setCeltiis(e.target.checked)} />
                 Celtiis
               </label>
@@ -170,22 +163,22 @@ export function DevicesClient({ initialDevices }: { initialDevices: Device[] }) 
               type="button"
               disabled={busy || (!mtn && !moov && !celtiis)}
               onClick={createDevice}
-              className="flex h-10 w-full items-center justify-center rounded-[8px] bg-[#FF6B35] text-sm font-semibold text-black hover:bg-[#E55A2A] disabled:opacity-50"
+              className={`flex h-11 w-full items-center justify-center ${btnLime} disabled:opacity-50`}
             >
               {busy ? (
                 <span className="h-4 w-4 animate-spin rounded-full border-2 border-black/30 border-t-black" />
               ) : (
-                "Create device"
+                "Créer"
               )}
             </button>
           </div>
         )}
         {step === "secret" && (
           <div className="space-y-3">
-            <p className="text-sm text-white/70">
-              This secret will not be shown again. Copy it to configure your Android gateway.
+            <p className="text-sm font-medium text-mp-muted">
+              Ce secret ne sera plus affiché. Copiez-le pour configurer la passerelle Android.
             </p>
-            <pre className="overflow-x-auto rounded-[8px] border border-white/[0.08] bg-[#0C0C0C] p-3 font-mono text-xs text-white/80">
+            <pre className="overflow-x-auto rounded-[var(--radius-mp-inner)] border border-mp-border bg-mp-bg p-3 font-mono text-xs text-mp-text">
               {secret}
             </pre>
           </div>
@@ -195,29 +188,29 @@ export function DevicesClient({ initialDevices }: { initialDevices: Device[] }) 
       <Modal
         open={warnOpen}
         onClose={() => setWarnOpen(false)}
-        title="Regenerate secret?"
+        title="Régénérer le secret ?"
         footer={
           <div className="flex gap-2">
             <button
               type="button"
               onClick={() => setWarnOpen(false)}
-              className="flex-1 rounded-[8px] border border-white/[0.08] py-2 text-sm text-white/70"
+              className="flex-1 rounded-full border border-mp-border py-2.5 text-sm font-semibold text-mp-text"
             >
-              Cancel
+              Annuler
             </button>
             <button
               type="button"
               onClick={() => setWarnOpen(false)}
-              className="flex-1 rounded-[8px] bg-[#FF5C5C] py-2 text-sm font-semibold text-black"
+              className="flex-1 rounded-full bg-red-500 py-2.5 text-sm font-bold text-white"
             >
-              Confirm
+              Confirmer
             </button>
           </div>
         }
       >
-        <p className="text-sm text-white/60">
-          L&apos;ancien secret cessera de fonctionner immédiatement. Vous devrez mettre à jour
-          l&apos;application Android.
+        <p className="text-sm text-mp-muted">
+          L&apos;ancien secret cessera de fonctionner immédiatement. Mettez à jour l&apos;application
+          Android.
         </p>
       </Modal>
     </div>

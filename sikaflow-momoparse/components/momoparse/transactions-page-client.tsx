@@ -38,19 +38,18 @@ export function TransactionsPageClient({ rows }: { rows: Row[] }) {
     <div className="space-y-4">
       <FilterBar />
 
-      {/* Mobile: cards */}
-      <div className="space-y-2 md:hidden">
+      <div className="space-y-3 md:hidden">
         {rows.map((r) => {
           const isOpen = expanded === r.id;
           return (
             <div
               key={r.id}
-              className="rounded-[8px] border border-white/[0.08] bg-mp-surface"
+              className="overflow-hidden rounded-[var(--radius-mp-inner)] border border-mp-border bg-mp-surface sf-card-shadow"
             >
               <button
                 type="button"
                 onClick={() => setExpanded(isOpen ? null : r.id)}
-                className="flex w-full items-center justify-between gap-2 px-3 py-3 text-left"
+                className="flex w-full items-center justify-between gap-2 px-4 py-4 text-left"
               >
                 <div className="min-w-0 flex-1 space-y-1">
                   <div className="flex flex-wrap items-center gap-2">
@@ -58,25 +57,25 @@ export function TransactionsPageClient({ rows }: { rows: Row[] }) {
                     <TypeBadge type={r.type} />
                     <StatusBadge status={r.status} />
                   </div>
-                  <p className="font-mono text-sm text-white/[0.92]">{r.amount}</p>
-                  <p className="truncate font-mono text-[11px] text-white/40">{r.reference}</p>
+                  <p className="font-mono text-sm font-bold text-mp-text">{r.amount}</p>
+                  <p className="truncate font-mono text-[11px] text-mp-muted">{r.reference}</p>
                 </div>
                 <Chevron open={isOpen} />
               </button>
               {isOpen && (
-                <div className="border-t border-white/[0.08] px-3 py-3">
-                  <p className="mb-2 text-[10px] font-mono uppercase tracking-widest text-white/40">
+                <div className="border-t border-mp-border px-4 py-4">
+                  <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-mp-muted">
                     SMS brut
                   </p>
-                  <pre className="max-h-40 overflow-auto rounded-[8px] border border-white/[0.08] bg-[#0C0C0C] p-3 font-mono text-[11px] leading-relaxed text-white/70">
+                  <pre className="max-h-40 overflow-auto rounded-[var(--radius-mp-inner)] border border-mp-border bg-mp-bg p-3 font-mono text-[11px] leading-relaxed text-mp-text">
                     {r.rawSms}
                   </pre>
                   {r.status === "failed" && (
                     <button
                       type="button"
-                      className="mt-2 inline-flex items-center gap-2 rounded-[8px] border border-[#FF6B35]/40 bg-[#FF6B35]/10 px-3 py-1.5 text-xs font-mono text-[#FF6B35] transition-colors hover:bg-[#FF6B35]/20"
+                      className="mt-3 inline-flex items-center gap-2 rounded-full bg-[#DFFF00] px-4 py-2 text-xs font-bold text-black transition-colors hover:bg-[#c8e600]"
                     >
-                      <RefreshIcon /> Re-parse
+                      <RefreshIcon /> Re-parser
                     </button>
                   )}
                 </div>
@@ -86,20 +85,19 @@ export function TransactionsPageClient({ rows }: { rows: Row[] }) {
         })}
       </div>
 
-      {/* Desktop: table */}
-      <div className="hidden overflow-hidden rounded-[8px] border border-white/[0.08] bg-mp-surface md:block">
+      <div className="hidden overflow-hidden rounded-[var(--radius-mp-inner)] border border-mp-border bg-mp-surface sf-card-shadow md:block">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[800px] border-collapse text-left text-sm">
             <thead>
-              <tr className="cursor-pointer border-b border-white/[0.08] font-mono text-[10px] uppercase tracking-wider text-white/45 hover:bg-white/[0.02]">
-                <th className="w-8 px-2 py-2" />
-                <th className="px-4 py-2 font-medium">Date ↕</th>
-                <th className="px-4 py-2 font-medium">Opérateur ↕</th>
-                <th className="px-4 py-2 font-medium">Type ↕</th>
-                <th className="px-4 py-2 text-right font-medium">Montant ↕</th>
-                <th className="px-4 py-2 font-medium">Référence ↕</th>
-                <th className="px-4 py-2 font-medium">Statut ↕</th>
-                <th className="px-4 py-2 font-medium w-24">Actions</th>
+              <tr className="cursor-pointer border-b border-mp-border text-[10px] font-bold uppercase tracking-wider text-mp-muted hover:bg-mp-bg">
+                <th className="w-8 px-2 py-3" />
+                <th className="px-4 py-3 font-bold">Date ↕</th>
+                <th className="px-4 py-3 font-bold">Opérateur ↕</th>
+                <th className="px-4 py-3 font-bold">Type ↕</th>
+                <th className="px-4 py-3 text-right font-bold">Montant ↕</th>
+                <th className="px-4 py-3 font-bold">Référence ↕</th>
+                <th className="px-4 py-3 font-bold">Statut ↕</th>
+                <th className="w-24 px-4 py-3 font-bold">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -108,13 +106,13 @@ export function TransactionsPageClient({ rows }: { rows: Row[] }) {
                 return (
                   <Fragment key={r.id}>
                     <tr
-                      className="cursor-pointer border-b border-white/[0.06] transition-colors hover:bg-white/[0.03]"
+                      className="cursor-pointer border-b border-mp-border transition-colors hover:bg-mp-bg"
                       onClick={() => setExpanded(isOpen ? null : r.id)}
                     >
-                      <td className="px-2 py-2 text-white/45">
+                      <td className="px-2 py-2 text-mp-muted">
                         <Chevron open={isOpen} />
                       </td>
-                      <td className="whitespace-nowrap px-4 py-2.5 font-mono text-xs text-white/70">
+                      <td className="whitespace-nowrap px-4 py-2.5 font-mono text-xs font-semibold text-mp-muted">
                         {r.date}
                       </td>
                       <td className="px-4 py-2.5">
@@ -123,10 +121,10 @@ export function TransactionsPageClient({ rows }: { rows: Row[] }) {
                       <td className="px-4 py-2.5">
                         <TypeBadge type={r.type} />
                       </td>
-                      <td className="whitespace-nowrap px-4 py-2.5 text-right font-mono text-sm text-white/[0.92]">
+                      <td className="whitespace-nowrap px-4 py-2.5 text-right font-mono text-sm font-bold text-mp-text">
                         {r.amount}
                       </td>
-                      <td className="px-4 py-2.5 font-mono text-xs text-white/45">{r.reference}</td>
+                      <td className="px-4 py-2.5 font-mono text-xs text-mp-muted">{r.reference}</td>
                       <td className="px-4 py-2.5">
                         <StatusBadge status={r.status} />
                       </td>
@@ -134,23 +132,23 @@ export function TransactionsPageClient({ rows }: { rows: Row[] }) {
                         {r.status === "failed" ? (
                           <button
                             type="button"
-                            className="inline-flex items-center gap-1 rounded-[6px] border border-white/[0.08] p-1.5 text-white/55 transition-colors hover:border-[#FF6B35]/40 hover:text-[#FF6B35]"
-                            title="Re-parse"
+                            className="inline-flex items-center gap-1 rounded-full border border-mp-border bg-mp-bg p-2 text-mp-muted transition-colors hover:border-black hover:text-mp-text"
+                            title="Re-parser"
                           >
                             <RefreshIcon />
                           </button>
                         ) : (
-                          <span className="text-white/25">—</span>
+                          <span className="text-mp-muted/40">—</span>
                         )}
                       </td>
                     </tr>
                     {isOpen && (
-                      <tr className="bg-[#0C0C0C]/80">
+                      <tr className="bg-mp-bg">
                         <td colSpan={8} className="px-4 py-4">
-                          <p className="mb-2 text-[10px] font-mono uppercase tracking-widest text-white/40">
+                          <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-mp-muted">
                             SMS brut
                           </p>
-                          <pre className="max-h-48 overflow-auto rounded-[8px] border border-white/[0.08] bg-mp-surface p-4 font-mono text-xs leading-relaxed text-white/70">
+                          <pre className="max-h-48 overflow-auto rounded-[var(--radius-mp-inner)] border border-mp-border bg-mp-surface p-4 font-mono text-xs leading-relaxed text-mp-text">
                             {r.rawSms}
                           </pre>
                         </td>
@@ -164,20 +162,20 @@ export function TransactionsPageClient({ rows }: { rows: Row[] }) {
         </div>
       </div>
 
-      <div className="flex items-center justify-between border-t border-white/[0.08] pt-4">
+      <div className="flex items-center justify-between border-t border-mp-border pt-4">
         <button
           type="button"
-          className="rounded-[8px] border border-white/[0.08] px-4 py-2 text-sm text-white/55 transition-colors hover:border-white/[0.15] hover:text-white/90 disabled:opacity-40"
+          className="rounded-full border border-mp-border bg-mp-surface px-5 py-2.5 text-sm font-semibold text-mp-muted transition-colors hover:border-mp-text hover:text-mp-text disabled:opacity-40"
           disabled
         >
-          Previous
+          Précédent
         </button>
-        <span className="font-mono text-xs text-white/40">Cursor: txn_7f2a…</span>
+        <span className="font-mono text-xs text-mp-muted">Cursor: txn_7f2a…</span>
         <button
           type="button"
-          className="rounded-[8px] border border-white/[0.08] px-4 py-2 text-sm text-white/[0.92] transition-colors hover:border-[#FF6B35]/40 hover:text-[#FF6B35]"
+          className="rounded-full border border-mp-border bg-mp-surface px-5 py-2.5 text-sm font-bold text-mp-text transition-colors hover:border-[#DFFF00] hover:bg-[#DFFF00]/30"
         >
-          Next
+          Suivant
         </button>
       </div>
     </div>

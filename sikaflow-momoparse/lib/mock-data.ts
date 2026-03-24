@@ -111,7 +111,7 @@ export const apiKeysMock = [
 export const devicesMock = [
   {
     id: "d1",
-    name: "Caisse Sika — Principal",
+    name: "Caisse Sika FLOW — Principal",
     deviceId: "dev_sika_01",
     operators: ["mtn", "moov"] as Operator[],
     lastPingMin: 2,

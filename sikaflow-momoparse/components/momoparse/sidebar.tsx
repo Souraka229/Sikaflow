@@ -5,20 +5,20 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 const nav = [
-  { href: "/dashboard", label: "Overview", icon: IconGrid },
+  { href: "/dashboard", label: "Vue d’ensemble", icon: IconGrid },
   { href: "/dashboard/transactions", label: "Transactions", icon: IconList },
-  { href: "/dashboard/api-keys", label: "API Keys", icon: IconKey },
-  { href: "/dashboard/devices", label: "Devices", icon: IconPhone },
-  { href: "/dashboard/docs", label: "Docs", icon: IconBook },
+  { href: "/dashboard/api-keys", label: "Clés API", icon: IconKey },
+  { href: "/dashboard/devices", label: "Appareils", icon: IconPhone },
+  { href: "/dashboard/docs", label: "Documentation", icon: IconBook },
 ];
 
 function IconGrid(props: { className?: string }) {
   return (
     <svg className={props.className} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <rect x="3" y="3" width="7" height="7" rx="1" />
-      <rect x="14" y="3" width="7" height="7" rx="1" />
-      <rect x="3" y="14" width="7" height="7" rx="1" />
-      <rect x="14" y="14" width="7" height="7" rx="1" />
+      <rect x="3" y="3" width="7" height="7" rx="2" />
+      <rect x="14" y="3" width="7" height="7" rx="2" />
+      <rect x="3" y="14" width="7" height="7" rx="2" />
+      <rect x="14" y="14" width="7" height="7" rx="2" />
     </svg>
   );
 }
@@ -79,24 +79,22 @@ export function DashboardSidebar() {
 
   return (
     <aside
-      className={`hidden shrink-0 border-r border-white/[0.08] bg-mp-bg md:flex md:flex-col ${collapsed ? "w-[64px]" : "w-[240px]"}`}
+      className={`hidden shrink-0 border-r border-mp-border bg-mp-surface md:flex md:flex-col ${collapsed ? "w-[72px]" : "w-[248px]"}`}
     >
-      <div className="flex h-14 items-center justify-between border-b border-white/[0.08] px-3">
+      <div className="flex h-[73px] items-center justify-between border-b border-mp-border px-3">
         {!collapsed && (
-          <span className="truncate pl-1 font-mono text-[10px] uppercase tracking-widest text-white/40">
-            SikaFlow
-          </span>
+          <span className="truncate pl-2 text-sm font-bold tracking-tight text-mp-text">Sika FLOW</span>
         )}
         <button
           type="button"
           onClick={() => setCollapsed((c) => !c)}
-          className="rounded-[6px] p-1.5 text-white/45 transition-colors hover:bg-white/[0.06] hover:text-white/80"
-          aria-label={collapsed ? "Étendre la barre" : "Réduire la barre"}
+          className="rounded-full p-2 text-mp-muted transition-colors hover:bg-mp-bg"
+          aria-label={collapsed ? "Étendre" : "Réduire"}
         >
           <IconChevron flipped={!collapsed} />
         </button>
       </div>
-      <nav className="flex flex-1 flex-col gap-0.5 p-2">
+      <nav className="flex flex-1 flex-col gap-1 p-3">
         {nav.map((item) => {
           const active =
             pathname === item.href ||
@@ -107,13 +105,13 @@ export function DashboardSidebar() {
               key={item.href}
               href={item.href}
               title={collapsed ? item.label : undefined}
-              className={`flex items-center gap-3 rounded-[6px] px-3 py-2.5 text-sm transition-colors duration-150 ${
+              className={`flex items-center gap-3 rounded-full px-3 py-2.5 text-sm font-semibold transition-colors ${
                 active
-                  ? "border-l-2 border-[#FF6B35] bg-[#FF6B35]/10 pl-[10px] text-white/[0.92]"
-                  : "border-l-2 border-transparent text-white/55 hover:bg-white/[0.04] hover:text-white/80"
+                  ? "bg-[#DFFF00] text-black"
+                  : "text-mp-muted hover:bg-mp-bg hover:text-mp-text"
               } ${collapsed ? "justify-center px-2" : ""}`}
             >
-              <Icon className={active ? "text-[#FF6B35]" : "text-white/45"} />
+              <Icon className={active ? "text-black" : "text-mp-muted"} />
               {!collapsed && <span>{item.label}</span>}
             </Link>
           );

@@ -1,34 +1,31 @@
+import { formatXof } from "@/lib/format-currency";
+
 const rows = [
-  { name: "MTN", volume: "892.000 FCFA", count: 45, pct: 62 },
-  { name: "Moov", volume: "324.000 FCFA", count: 32, pct: 22 },
-  { name: "Celtiis", volume: "78.000 FCFA", count: 12, pct: 16 },
+  { name: "MTN", volume: formatXof(892_000), count: 45, pct: 62 },
+  { name: "Moov", volume: formatXof(324_000), count: 32, pct: 22 },
+  { name: "Celtiis", volume: formatXof(78_000), count: 12, pct: 16 },
 ];
 
 export function OperatorBreakdown() {
   return (
-    <div className="rounded-[8px] border border-white/[0.08] bg-mp-surface p-4">
-      <h3 className="text-[11px] font-mono uppercase tracking-widest text-white/55">
-        Operator breakdown
-      </h3>
+    <div className="rounded-[var(--radius-mp-inner)] border border-mp-border bg-mp-surface p-5 sf-card-shadow">
+      <h3 className="text-xs font-bold uppercase tracking-wide text-mp-muted">Par opérateur</h3>
       <ul className="mt-4 space-y-4">
         {rows.map((r) => (
           <li key={r.name}>
             <div className="flex items-baseline justify-between gap-2 text-sm">
-              <span className="font-medium text-white/[0.92]">{r.name}</span>
-              <span className="font-mono text-xs text-white/55">
-                {r.volume}{" "}
-                <span className="text-white/40">({r.count} tx)</span>
+              <span className="font-bold text-mp-text">{r.name}</span>
+              <span className="text-xs font-semibold text-mp-muted">
+                {r.volume} <span className="text-mp-muted/70">({r.count} tx)</span>
               </span>
             </div>
-            <div className="mt-2 h-2 w-full overflow-hidden rounded-[4px] bg-white/10">
+            <div className="mt-2 h-2.5 w-full overflow-hidden rounded-full bg-neutral-200">
               <div
-                className="h-full rounded-[4px] bg-[#FF6B35] transition-all duration-300"
+                className="h-full rounded-full bg-[#DFFF00] transition-all duration-300"
                 style={{ width: `${r.pct}%` }}
               />
             </div>
-            <p className="mt-1 text-right font-mono text-[10px] text-white/40">
-              {r.pct}%
-            </p>
+            <p className="mt-1 text-right text-[10px] font-bold text-mp-muted">{r.pct}%</p>
           </li>
         ))}
       </ul>

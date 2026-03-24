@@ -1,24 +1,26 @@
 @import "tailwindcss";
 
-/* MoMoParse / SikaFlow — design tokens (Tailwind v4 @theme) */
+/* Sika FLOW — FinTech Bento (réf. maquette : fond clair, accent citron #DFFF00) */
 @theme inline {
-  --color-mp-bg: #0c0c0c;
-  --color-mp-surface: #1a1a1a;
-  --color-mp-accent: #ff6b35;
-  --color-mp-accent-hover: #e55a2a;
-  --color-mp-border: rgba(255, 255, 255, 0.08);
-  --color-mp-text: rgba(255, 255, 255, 0.92);
-  --color-mp-muted: rgba(255, 255, 255, 0.55);
-  --color-mp-mtn: #ff6b35;
-  --color-mp-moov: #6b4eff;
-  --color-mp-celtiis: #2d9cdb;
-  --color-mp-received: #00c48c;
-  --color-mp-sent: #ff5c5c;
-  --color-mp-payment: #0099ff;
-  --color-mp-success: #00c48c;
-  --color-mp-failed: #ff5c5c;
-  --color-mp-pending: #ff6b35;
-  --radius-mp: 8px;
+  --color-mp-bg: #efeff1;
+  --color-mp-surface: #ffffff;
+  --color-mp-accent: #dfff00;
+  --color-mp-accent-hover: #c8e600;
+  --color-mp-border: #e5e5e8;
+  --color-mp-text: #0a0a0a;
+  --color-mp-muted: #6b7280;
+  --color-mp-mtn: #1a1a1a;
+  --color-mp-moov: #5b21b6;
+  --color-mp-celtiis: #0369a1;
+  --color-mp-received: #15803d;
+  --color-mp-sent: #b91c1c;
+  --color-mp-payment: #1d4ed8;
+  --color-mp-success: #15803d;
+  --color-mp-failed: #b91c1c;
+  --color-mp-pending: #a16207;
+  --radius-mp: 28px;
+  --radius-mp-inner: 20px;
+  --radius-mp-chip: 9999px;
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
@@ -37,24 +39,30 @@
   }
 }
 
-/* Skeleton (no decorative gradients — opacity pulse only) */
+.sf-card-shadow {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+.sf-card-shadow-lg {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+}
+
 @keyframes mp-skeleton-pulse {
   0%,
   100% {
     opacity: 1;
   }
   50% {
-    opacity: 0.45;
+    opacity: 0.5;
   }
 }
 
 .mp-skeleton {
-  border-radius: var(--radius-mp);
-  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-mp-inner);
+  background: rgba(0, 0, 0, 0.06);
   animation: mp-skeleton-pulse 1.4s ease-in-out infinite;
 }
 
-/* Live feed new row hint */
 @keyframes mp-slide-in {
   from {
     opacity: 0;

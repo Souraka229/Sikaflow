@@ -1,15 +1,21 @@
-import { DocsClient } from "@/components/momoparse/docs-client";
+import type { Metadata } from "next";
+import { DocsHero } from "@/components/momoparse/docs-hero";
+import { DocsPlayground } from "@/components/momoparse/docs-playground";
+
+export const metadata: Metadata = {
+  title: "Documentation API",
+  description: "Référence REST v1, exemples et playground Sika FLOW.",
+};
 
 export default function DocsPage() {
+  const demoKey =
+    process.env.SIKAFLOW_DOCS_DEMO_KEY?.trim() ||
+    (process.env.NODE_ENV === "development" ? "mklive_dev_sikaflow_local" : "");
+
   return (
-    <div className="mx-auto max-w-[1920px] space-y-4">
-      <div>
-        <h1 className="text-lg font-semibold text-white/[0.92]">API documentation</h1>
-        <p className="mt-1 text-sm text-white/55">
-          Référence publique — authentification <span className="font-mono text-white/70">X-Api-Key</span>.
-        </p>
-      </div>
-      <DocsClient />
+    <div className="mx-auto max-w-[1920px] space-y-8 pb-10 md:pb-8">
+      <DocsHero />
+      <DocsPlayground defaultApiKey={demoKey} />
     </div>
   );
 }

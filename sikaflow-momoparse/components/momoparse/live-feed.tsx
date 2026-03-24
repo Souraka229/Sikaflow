@@ -3,27 +3,21 @@ import type { LiveTx } from "@/lib/mock-data";
 
 export function LiveTransactionsFeed({ items }: { items: LiveTx[] }) {
   return (
-    <div className="rounded-[8px] border border-white/[0.08] bg-mp-surface">
-      <div className="border-b border-white/[0.08] px-4 py-3">
-        <h3 className="text-[11px] font-mono uppercase tracking-widest text-white/55">
-          Live transactions
-        </h3>
+    <div className="overflow-hidden rounded-[var(--radius-mp-inner)] border border-mp-border bg-mp-surface sf-card-shadow">
+      <div className="border-b border-mp-border px-4 py-3">
+        <h3 className="text-xs font-bold uppercase tracking-wide text-mp-muted">Flux en direct</h3>
       </div>
-      <ul className="max-h-[280px] divide-y divide-white/[0.06] overflow-auto">
-        {items.map((tx, i) => (
+      <ul className="max-h-[280px] divide-y divide-mp-border overflow-auto">
+        {items.map((tx) => (
           <li
             key={tx.id}
-            className={`mp-feed-row flex flex-wrap items-center gap-2 px-4 py-2.5 text-sm transition-colors duration-150 hover:bg-white/[0.03] ${i === 0 ? "" : ""}`}
+            className="mp-feed-row flex flex-wrap items-center gap-2 px-4 py-3 text-sm transition-colors hover:bg-mp-bg"
           >
-            <span className="font-mono text-xs tabular-nums text-white/45">
-              {tx.time}
-            </span>
+            <span className="text-xs font-semibold tabular-nums text-mp-muted">{tx.time}</span>
             <OperatorBadge op={tx.operator} />
             <TypeBadge type={tx.type} />
-            <span className="ml-auto font-mono text-sm font-medium text-white/[0.92]">
-              {tx.amount}
-            </span>
-            <span className="font-mono text-[11px] text-white/40">{tx.reference}</span>
+            <span className="ml-auto font-mono text-sm font-bold text-mp-text">{tx.amount}</span>
+            <span className="font-mono text-[11px] text-mp-muted">{tx.reference}</span>
             <StatusBadge status={tx.status} />
           </li>
         ))}

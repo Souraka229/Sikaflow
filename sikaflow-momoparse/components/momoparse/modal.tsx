@@ -30,7 +30,7 @@ export function Modal({
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       <button
         type="button"
-        className="absolute inset-0 bg-black/70"
+        className="absolute inset-0 bg-black/45"
         aria-label="Fermer"
         onClick={onClose}
       />
@@ -38,15 +38,15 @@ export function Modal({
         role="dialog"
         aria-modal="true"
         aria-labelledby="mp-modal-title"
-        className="relative z-10 w-full max-w-md rounded-[8px] border border-white/[0.08] bg-[#141414] shadow-none"
+        className="sf-card-shadow-lg relative z-10 w-full max-w-md overflow-hidden rounded-[var(--radius-mp-inner)] border border-mp-border bg-mp-surface"
       >
-        <div className="border-b border-white/[0.08] px-4 py-3">
-          <h2 id="mp-modal-title" className="font-mono text-sm font-semibold text-white/[0.92]">
+        <div className="border-b border-mp-border px-4 py-3">
+          <h2 id="mp-modal-title" className="text-sm font-bold text-mp-text">
             {title}
           </h2>
         </div>
         <div className="px-4 py-4">{children}</div>
-        {footer && <div className="border-t border-white/[0.08] px-4 py-3">{footer}</div>}
+        {footer && <div className="border-t border-mp-border px-4 py-3">{footer}</div>}
       </div>
     </div>
   );

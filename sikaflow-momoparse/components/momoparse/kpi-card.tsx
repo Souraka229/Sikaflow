@@ -10,25 +10,19 @@ export function KpiCard({
   subVariant?: "trend" | "badge" | "status";
 }) {
   return (
-    <div className="rounded-[8px] border border-white/[0.08] bg-mp-surface p-4 transition-colors duration-150 hover:border-white/[0.12]">
-      <p className="text-[11px] font-mono uppercase tracking-widest text-white/55">
-        {title}
-      </p>
-      <p className="mt-2 font-mono text-2xl font-semibold tracking-tight text-white/[0.92]">
-        {value}
-      </p>
+    <div className="sf-card-shadow rounded-[var(--radius-mp-inner)] border border-mp-border bg-mp-surface p-5 transition-shadow hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]">
+      <p className="text-xs font-semibold uppercase tracking-wide text-mp-muted">{title}</p>
+      <p className="mt-2 text-2xl font-bold tracking-tight text-mp-text">{value}</p>
       <div className="mt-2">
         {subVariant === "trend" && (
-          <span className="text-xs font-mono text-[#00C48C]">{sub}</span>
+          <span className="text-sm font-semibold text-emerald-600">{sub}</span>
         )}
         {subVariant === "badge" && (
-          <span className="rounded-[6px] border border-white/15 bg-white/5 px-2 py-0.5 text-[10px] font-mono uppercase tracking-wide text-white/55">
+          <span className="inline-block rounded-full border border-mp-border bg-mp-bg px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-mp-muted">
             {sub}
           </span>
         )}
-        {subVariant === "status" && (
-          <span className="text-xs text-white/70">{sub}</span>
-        )}
+        {subVariant === "status" && <span className="text-sm text-mp-muted">{sub}</span>}
       </div>
     </div>
   );

@@ -5,44 +5,42 @@ type Row = LiveTx & { date: string };
 
 export function RecentTransactionsTable({ rows }: { rows: Row[] }) {
   return (
-    <div className="overflow-hidden rounded-[8px] border border-white/[0.08] bg-mp-surface">
-      <div className="border-b border-white/[0.08] px-4 py-3">
-        <h3 className="text-[11px] font-mono uppercase tracking-widest text-white/55">
-          Recent transactions
-        </h3>
+    <div className="overflow-hidden rounded-[var(--radius-mp-inner)] border border-mp-border bg-mp-surface sf-card-shadow">
+      <div className="border-b border-mp-border px-4 py-3">
+        <h3 className="text-xs font-bold uppercase tracking-wide text-mp-muted">Transactions récentes</h3>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full min-w-[640px] border-collapse text-left text-sm">
           <thead>
-            <tr className="border-b border-white/[0.08] font-mono text-[10px] uppercase tracking-wider text-white/45">
-              <th className="px-4 py-2 font-medium">Date</th>
-              <th className="px-4 py-2 font-medium">Opérateur</th>
-              <th className="px-4 py-2 font-medium">Type</th>
-              <th className="px-4 py-2 font-medium text-right">Montant</th>
-              <th className="px-4 py-2 font-medium">Référence</th>
-              <th className="px-4 py-2 font-medium">Statut</th>
+            <tr className="border-b border-mp-border text-[10px] font-bold uppercase tracking-wider text-mp-muted">
+              <th className="px-4 py-3 font-bold">Date</th>
+              <th className="px-4 py-3 font-bold">Opérateur</th>
+              <th className="px-4 py-3 font-bold">Type</th>
+              <th className="px-4 py-3 text-right font-bold">Montant</th>
+              <th className="px-4 py-3 font-bold">Référence</th>
+              <th className="px-4 py-3 font-bold">Statut</th>
             </tr>
           </thead>
           <tbody>
             {rows.map((r) => (
               <tr
                 key={r.id}
-                className="border-b border-white/[0.06] transition-colors duration-150 hover:bg-white/[0.03]"
+                className="border-b border-mp-border transition-colors hover:bg-mp-bg"
               >
-                <td className="whitespace-nowrap px-4 py-2.5 font-mono text-xs text-white/70">
+                <td className="whitespace-nowrap px-4 py-3 text-xs font-semibold text-mp-muted">
                   {r.date}
                 </td>
-                <td className="px-4 py-2.5">
+                <td className="px-4 py-3">
                   <OperatorBadge op={r.operator} />
                 </td>
-                <td className="px-4 py-2.5">
+                <td className="px-4 py-3">
                   <TypeBadge type={r.type} />
                 </td>
-                <td className="whitespace-nowrap px-4 py-2.5 text-right font-mono text-sm text-white/[0.92]">
+                <td className="whitespace-nowrap px-4 py-3 text-right font-mono text-sm font-bold text-mp-text">
                   {r.amount}
                 </td>
-                <td className="px-4 py-2.5 font-mono text-xs text-white/45">{r.reference}</td>
-                <td className="px-4 py-2.5">
+                <td className="px-4 py-3 font-mono text-xs text-mp-muted">{r.reference}</td>
+                <td className="px-4 py-3">
                   <StatusBadge status={r.status} />
                 </td>
               </tr>

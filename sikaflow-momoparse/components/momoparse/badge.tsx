@@ -1,26 +1,26 @@
 import type { Operator, TxStatus, TxType } from "@/lib/mock-data";
 
 const operatorClass: Record<Operator, string> = {
-  mtn: "bg-[#FF6B35]/15 text-[#FF6B35] border-[#FF6B35]/35",
-  moov: "bg-[#6B4EFF]/15 text-[#6B4EFF] border-[#6B4EFF]/35",
-  celtiis: "bg-[#2D9CDB]/15 text-[#2D9CDB] border-[#2D9CDB]/35",
+  mtn: "bg-neutral-100 text-neutral-900 border-neutral-200",
+  moov: "bg-violet-50 text-violet-900 border-violet-200",
+  celtiis: "bg-sky-50 text-sky-900 border-sky-200",
 };
 
 const typeClass: Record<TxType, string> = {
-  received: "bg-[#00C48C]/15 text-[#00C48C] border-[#00C48C]/35",
-  sent: "bg-[#FF5C5C]/15 text-[#FF5C5C] border-[#FF5C5C]/35",
-  payment: "bg-[#0099FF]/15 text-[#0099FF] border-[#0099FF]/35",
-  withdrawal: "bg-white/10 text-white/70 border-white/15",
+  received: "bg-emerald-50 text-emerald-900 border-emerald-200",
+  sent: "bg-red-50 text-red-900 border-red-200",
+  payment: "bg-blue-50 text-blue-900 border-blue-200",
+  withdrawal: "bg-neutral-100 text-neutral-700 border-neutral-200",
 };
 
 const statusClass: Record<TxStatus, string> = {
-  success: "bg-[#00C48C]/15 text-[#00C48C] border-[#00C48C]/35",
-  failed: "bg-[#FF5C5C]/15 text-[#FF5C5C] border-[#FF5C5C]/35",
-  pending: "bg-[#FF6B35]/15 text-[#FF6B35] border-[#FF6B35]/35",
+  success: "bg-emerald-50 text-emerald-800 border-emerald-200",
+  failed: "bg-red-50 text-red-800 border-red-200",
+  pending: "bg-amber-50 text-amber-900 border-amber-200",
 };
 
 const base =
-  "inline-flex items-center rounded-[6px] border px-2 py-0.5 text-[11px] font-mono font-medium uppercase tracking-wide";
+  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-semibold tracking-wide";
 
 export function OperatorBadge({ op }: { op: Operator }) {
   const label = op === "mtn" ? "MTN" : op === "moov" ? "Moov" : "Celtiis";
@@ -29,19 +29,19 @@ export function OperatorBadge({ op }: { op: Operator }) {
 
 export function TypeBadge({ type }: { type: TxType }) {
   const labels: Record<TxType, string> = {
-    received: "Received",
-    sent: "Sent",
-    payment: "Payment",
-    withdrawal: "Withdrawal",
+    received: "Reçu",
+    sent: "Envoyé",
+    payment: "Paiement",
+    withdrawal: "Retrait",
   };
   return <span className={`${base} ${typeClass[type]}`}>{labels[type]}</span>;
 }
 
 export function StatusBadge({ status }: { status: TxStatus }) {
   const labels: Record<TxStatus, string> = {
-    success: "Success",
-    failed: "Failed",
-    pending: "Pending",
+    success: "OK",
+    failed: "Échec",
+    pending: "En cours",
   };
   return <span className={`${base} ${statusClass[status]}`}>{labels[status]}</span>;
 }
@@ -49,10 +49,10 @@ export function StatusBadge({ status }: { status: TxStatus }) {
 export function PlanBadge({ plan }: { plan: "PRO" | "FREE" }) {
   return (
     <span
-      className={`rounded-[6px] border px-2 py-0.5 text-[10px] font-mono font-semibold uppercase tracking-wider ${
+      className={`rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
         plan === "PRO"
-          ? "border-[#FF6B35]/40 bg-[#FF6B35]/15 text-[#FF6B35]"
-          : "border-white/15 bg-white/5 text-white/55"
+          ? "border-transparent bg-[#DFFF00] text-black"
+          : "border-mp-border bg-mp-bg text-mp-muted"
       }`}
     >
       {plan}
