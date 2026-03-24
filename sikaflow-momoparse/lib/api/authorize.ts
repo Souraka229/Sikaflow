@@ -28,13 +28,3 @@ export function authorizeApiRequest(request: Request): AuthResult {
   }
   return { ok: true, remaining: rl.remaining, resetAt: rl.resetAt };
 }
-  const key = getApiKeyFromRequest(request);
-  if (!key || !validateApiKey(key)) {
-    return { ok: false, response: jsonError("Invalid or missing X-Api-Key", 401) };
-  }
-  const rl = checkRateLimit(key);
-  if (!rl.ok) {
-    return { ok: false, response: jsonError("Rate limit exceeded. Try again later.", 429) };
-  }
-  return { ok: true, remaining: rl.remaining };
-}
