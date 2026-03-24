@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "installCommand": "npm ci && cd sikaflow-momoparse && npm ci",
+  "buildCommand": "cd sikaflow-momoparse && npm run build",
+  "devCommand": "cd sikaflow-momoparse && npm run dev",
+  "outputDirectory": "sikaflow-momoparse/.next"
+}
