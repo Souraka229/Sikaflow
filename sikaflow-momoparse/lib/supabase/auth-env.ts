@@ -3,9 +3,21 @@ export function normalizeSupabaseUrl(url: string): string {
   return url.trim().replace(/\/+$/, "");
 }
 
+function firstTrimmedEnv(...keys: string[]): string | undefined {
+  for (const key of keys) {
+    const v = process.env[key]?.trim();
+    if (v) return v;
+  }
+  return undefined;
+}
+
 /** URL projet pour auth navigateur + SSR (@supabase/ssr). */
 export function getSupabasePublicUrl(): string | undefined {
-  const u = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  const u = firstTrimmedEnv(
+    "NEXT_PUBLIC_SUPABASE_URL",
+    // Faute d’orthographe fréquente sur Vercel (SUPER vs SUPE)
+    "NEXT_PUBLIC_SUPERBASE_URL",
+  );
   if (!u) return undefined;
   return normalizeSupabaseUrl(u);
 }
@@ -15,7 +27,7 @@ export function getSupabasePublicUrl(): string | undefined {
  * Préfère `SUPABASE_URL` si défini (sans exposer au bundle client), sinon l’URL publique.
  */
 export function getSupabaseAdminProjectUrl(): string | undefined {
-  const direct = process.env.SUPABASE_URL?.trim();
+  const direct = firstTrimmedEnv("SUPABASE_URL", "SUPERBASE_URL");
   if (direct) return normalizeSupabaseUrl(direct);
   return getSupabasePublicUrl();
 }
@@ -25,8 +37,14 @@ export function getSupabaseAdminProjectUrl(): string | undefined {
  * Les deux remplissent le même rôle pour @supabase/ssr en navigateur.
  */
 export function getSupabasePublicAnonKey(): string | undefined {
-  const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
-  const publishable = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.trim();
+  const anon = firstTrimmedEnv(
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+    "NEXT_PUBLIC_SUPERBASE_ANON_KEY",
+  );
+  const publishable = firstTrimmedEnv(
+    "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
+    "NEXT_PUBLIC_SUPERBASE_PUBLISHABLE_KEY",
+  );
   return anon || publishable || undefined;
 }
 
@@ -61,8 +79,8 @@ export function getSupabaseAuthMissingMessage(): string {
   return (
     "L’inscription et la connexion par compte ne sont pas actives sur ce déploiement : " +
     "les variables NEXT_PUBLIC_SUPABASE_URL et une clé publique (NEXT_PUBLIC_SUPABASE_ANON_KEY ou NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) ne sont pas présentes dans le build. " +
-    "Si vous administrez le site : dans l’hébergeur (ex. Vercel → Project → Settings → Environment Variables), " +
-    "vérifiez ces noms exacts, enregistrez, puis lancez un nouveau déploiement — " +
+    "Vérifiez l’orthographe : SUPABASE (avec un P), pas SUPERBASE. " +
+    "Dans l’hébergeur (ex. Vercel → Settings → Environment Variables), corrigez les noms si besoin, enregistrez, puis redéployez — " +
     "les variables NEXT_PUBLIC_* sont figées au moment du build."
   );
 }
