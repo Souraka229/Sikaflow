@@ -3,15 +3,17 @@
 import { useState } from "react";
 import { OperatorBadge } from "@/components/momoparse/badge";
 import { Modal } from "@/components/momoparse/modal";
-import type { Operator } from "@/lib/mock-data";
 
-type Device = {
+type Operator = "mtn" | "moov" | "celtiis";
+
+interface Device {
   id: string;
   name: string;
   deviceId: string;
   operators: Operator[];
   lastPingMin: number;
-};
+  isActive?: boolean;
+}
 
 function statusFromMin(m: number) {
   if (m < 5) return { dot: "bg-emerald-500", label: `Dernier ping : il y a ${m} min` };

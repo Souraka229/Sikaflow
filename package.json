@@ -1,12 +1,17 @@
 {
-  "name": "nouveau-dossier-workspace",
+  "name": "sikaflow",
   "private": true,
-  "description": "Point d'entrée npm — app Sika FLOW (MoMoParse) dans sikaflow-momoparse.",
+  "description": "Sika FLOW - Analytics et API Mobile Money",
   "scripts": {
-    "dev": "npm run dev --prefix ./sikaflow-momoparse",
-    "build": "npm run build --prefix ./sikaflow-momoparse",
-    "start": "npm run start --prefix ./sikaflow-momoparse",
-    "lint": "npm run lint --prefix ./sikaflow-momoparse",
-    "install:app": "npm install --prefix ./sikaflow-momoparse"
+    "dev": "cd sikaflow-momoparse && npm run dev",
+    "build": "cd sikaflow-momoparse && npm run build",
+    "start": "cd sikaflow-momoparse && npm run start",
+    "lint": "cd sikaflow-momoparse && npm run lint",
+    "postinstall": "cd sikaflow-momoparse && npm install"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.100.0",
+    "next": "^16.2.1",
+    "react": "^19.2.4"
   }
 }

@@ -1,10 +1,19 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { DashboardShell } from "@/components/momoparse/dashboard-shell";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   description: "Espace Sika FLOW — analytics Mobile Money, API et appareils.",
 };
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
   return <DashboardShell>{children}</DashboardShell>;
 }

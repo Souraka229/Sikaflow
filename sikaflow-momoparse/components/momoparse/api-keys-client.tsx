@@ -3,14 +3,14 @@
 import { useState } from "react";
 import { Modal } from "@/components/momoparse/modal";
 
-type KeyRow = {
+interface KeyRow {
   id: string;
   name: string;
   prefix: string;
   scopes: string[];
-  lastUsed: string;
+  lastUsed: string | null;
   active: boolean;
-};
+}
 
 function TrashIcon() {
   return (
