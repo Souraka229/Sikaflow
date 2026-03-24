@@ -4,7 +4,11 @@ import {
   isProduction,
   isSupabaseConfigured,
 } from "@/lib/env/server";
-import { isSupabaseAuthConfigured } from "@/lib/supabase/auth-env";
+import {
+  getSupabaseEnvRenameHints,
+  isSupabaseAuthConfigured,
+  usesTypoSupabaseEnvNames,
+} from "@/lib/supabase/auth-env";
 
 /**
  * Prêt pour le trafic : en production, exige des clés API configurées.
@@ -18,6 +22,8 @@ export async function GET() {
     production: isProduction(),
     apiKeysConfigured: hasConfiguredApiKeys(),
     supabaseAuthConfigured: supabaseAuth,
+    supabaseUsesTypoEnvNames: usesTypoSupabaseEnvNames(),
+    supabaseRenameHints: [...getSupabaseEnvRenameHints()],
     persistence: isSupabaseConfigured() ? "supabase" : "memory",
     time: new Date().toISOString(),
   };
