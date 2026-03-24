@@ -1,19 +1,22 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
-import { isSupabaseAuthConfigured } from "@/lib/supabase/auth-env";
+import {
+  getSupabaseAuthMissingMessage,
+  getSupabasePublicAnonKey,
+  getSupabasePublicUrl,
+  isSupabaseAuthConfigured,
+} from "@/lib/supabase/auth-env";
 
 export async function createClient() {
   if (!isSupabaseAuthConfigured()) {
-    throw new Error(
-      "Supabase Auth non configuré : NEXT_PUBLIC_SUPABASE_URL et NEXT_PUBLIC_SUPABASE_ANON_KEY requis"
-    );
+    throw new Error(getSupabaseAuthMissingMessage());
   }
 
   const cookieStore = await cookies();
 
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!.trim(),
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!.trim(),
+    getSupabasePublicUrl()!,
+    getSupabasePublicAnonKey()!,
     {
       cookies: {
         getAll() {

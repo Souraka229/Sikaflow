@@ -3,7 +3,10 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { isSupabaseAuthConfigured } from "@/lib/supabase/auth-env";
+import {
+  getSupabaseDemoLoginHint,
+  isSupabaseAuthConfigured,
+} from "@/lib/supabase/auth-env";
 
 export function LoginForm() {
   const router = useRouter();
@@ -140,9 +143,7 @@ export function LoginForm() {
       </button>
 
       <p className="rounded-[var(--radius-mp-inner)] border border-mp-border bg-mp-bg px-3 py-2 text-center text-[11px] font-medium text-mp-muted">
-        {isSupabaseAuthConfigured()
-          ? "Utilisez vos identifiants Supabase pour accéder au tableau de bord."
-          : "Mode démo : sans variables Supabase dans .env.local, la connexion ouvre directement le tableau de bord."}
+        {getSupabaseDemoLoginHint()}
       </p>
     </>
   );
