@@ -1,5 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
-import { isSupabaseAuthConfigured } from "@/lib/supabase/auth-env";
+import {
+  isDevDemoWithoutSupabase,
+  isSupabaseAuthConfigured,
+} from "@/lib/supabase/auth-env";
 import { apiKeysMock } from "@/lib/mock-data";
 
 export interface ApiKey {
@@ -29,8 +32,11 @@ function formatLastUsed(date: string | null): string {
 }
 
 export async function getApiKeys(): Promise<ApiKey[]> {
-  if (!isSupabaseAuthConfigured()) {
+  if (isDevDemoWithoutSupabase()) {
     return apiKeysMock as ApiKey[];
+  }
+  if (!isSupabaseAuthConfigured()) {
+    return [];
   }
 
   const supabase = await createClient();

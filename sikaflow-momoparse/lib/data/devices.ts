@@ -1,5 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
-import { isSupabaseAuthConfigured } from "@/lib/supabase/auth-env";
+import {
+  isDevDemoWithoutSupabase,
+  isSupabaseAuthConfigured,
+} from "@/lib/supabase/auth-env";
 import { devicesMock } from "@/lib/mock-data";
 
 export type Operator = "mtn" | "moov" | "celtiis";
@@ -14,11 +17,14 @@ export interface Device {
 }
 
 export async function getDevices(): Promise<Device[]> {
-  if (!isSupabaseAuthConfigured()) {
+  if (isDevDemoWithoutSupabase()) {
     return devicesMock.map((d) => ({
       ...d,
       isActive: true,
     }));
+  }
+  if (!isSupabaseAuthConfigured()) {
+    return [];
   }
 
   const supabase = await createClient();

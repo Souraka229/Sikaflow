@@ -3,6 +3,8 @@
  * Ne pas importer depuis du code client.
  */
 
+import { getSupabaseAdminProjectUrl } from "@/lib/supabase/auth-env";
+
 export function isProduction(): boolean {
   return process.env.NODE_ENV === "production";
 }
@@ -24,12 +26,9 @@ export function getCorsAllowOrigin(): string {
   return o && o.length > 0 ? o : "*";
 }
 
-/** Persistance API (service role) — aligné sur lib/supabase/admin.ts */
+/** Persistance API (service role) — même URL que lib/supabase/admin.ts */
 export function isSupabaseConfigured(): boolean {
-  const url =
-    process.env.SUPABASE_URL?.trim() ||
-    process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() ||
-    "";
+  const url = getSupabaseAdminProjectUrl();
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() || "";
   return Boolean(url && key);
 }

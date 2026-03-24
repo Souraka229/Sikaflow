@@ -1,7 +1,23 @@
-/** URL projet Supabase (navigateur / SSR). */
+/** Évite les doubles slashes et les URLs mal formées côté client Supabase. */
+export function normalizeSupabaseUrl(url: string): string {
+  return url.trim().replace(/\/+$/, "");
+}
+
+/** URL projet pour auth navigateur + SSR (@supabase/ssr). */
 export function getSupabasePublicUrl(): string | undefined {
   const u = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
-  return u || undefined;
+  if (!u) return undefined;
+  return normalizeSupabaseUrl(u);
+}
+
+/**
+ * URL projet pour le client **service role** (serveur uniquement).
+ * Préfère `SUPABASE_URL` si défini (sans exposer au bundle client), sinon l’URL publique.
+ */
+export function getSupabaseAdminProjectUrl(): string | undefined {
+  const direct = process.env.SUPABASE_URL?.trim();
+  if (direct) return normalizeSupabaseUrl(direct);
+  return getSupabasePublicUrl();
 }
 
 /**
@@ -20,6 +36,14 @@ export function getSupabasePublicAnonKey(): string | undefined {
  */
 export function isSupabaseAuthConfigured(): boolean {
   return Boolean(getSupabasePublicUrl() && getSupabasePublicAnonKey());
+}
+
+/**
+ * Démo locale (`next dev` uniquement) : données fictives + accès dashboard sans mot de passe.
+ * En production (Vercel, `next start`), toujours false — connexion et données réelles uniquement via Supabase.
+ */
+export function isDevDemoWithoutSupabase(): boolean {
+  return process.env.NODE_ENV === "development" && !isSupabaseAuthConfigured();
 }
 
 /**
@@ -43,13 +67,13 @@ export function getSupabaseAuthMissingMessage(): string {
   );
 }
 
-/** Texte court sous le formulaire de connexion quand l’auth Supabase est absente. */
+/** Texte court sous le formulaire de connexion. */
 export function getSupabaseDemoLoginHint(): string {
   if (isSupabaseAuthConfigured()) {
     return "Utilisez vos identifiants Supabase pour accéder au tableau de bord.";
   }
-  if (process.env.NODE_ENV === "development") {
-    return "Mode démo : sans variables dans .env.local, la connexion ouvre directement le tableau de bord.";
+  if (isDevDemoWithoutSupabase()) {
+    return "Mode démo (dev uniquement) : sans Supabase dans .env.local, « Se connecter » ouvre le tableau de bord sans vérifier email/mot de passe.";
   }
-  return "Mode démo : sans Supabase configuré sur ce serveur, la connexion ouvre le tableau de bord. Pour des comptes réels, ajoutez NEXT_PUBLIC_SUPABASE_URL et NEXT_PUBLIC_SUPABASE_ANON_KEY (ou NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY), puis redéployez.";
+  return "La connexion sécurisée nécessite Supabase sur ce serveur (NEXT_PUBLIC_SUPABASE_URL + clé publique), puis un redéploiement.";
 }

@@ -4,7 +4,9 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import {
+  getSupabaseAuthMissingMessage,
   getSupabaseDemoLoginHint,
+  isDevDemoWithoutSupabase,
   isSupabaseAuthConfigured,
 } from "@/lib/supabase/auth-env";
 
@@ -20,6 +22,11 @@ export function LoginForm() {
 
     try {
       if (!isSupabaseAuthConfigured()) {
+        if (!isDevDemoWithoutSupabase()) {
+          setError(getSupabaseAuthMissingMessage());
+          setPending(false);
+          return;
+        }
         router.push("/dashboard");
         setPending(false);
         return;

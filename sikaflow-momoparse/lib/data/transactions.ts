@@ -1,6 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
 import { formatXof } from "@/lib/format-currency";
-import { isSupabaseAuthConfigured } from "@/lib/supabase/auth-env";
+import {
+  isDevDemoWithoutSupabase,
+  isSupabaseAuthConfigured,
+} from "@/lib/supabase/auth-env";
 import { recentTxMock } from "@/lib/mock-data";
 
 export type Operator = "mtn" | "moov" | "celtiis";
@@ -78,8 +81,11 @@ const DEMO_BY_OPERATOR: Record<Operator, { count: number; volume: number }> = {
 };
 
 export async function getRecentTransactions(limit = 10): Promise<Transaction[]> {
-  if (!isSupabaseAuthConfigured()) {
+  if (isDevDemoWithoutSupabase()) {
     return demoTransactions(limit);
+  }
+  if (!isSupabaseAuthConfigured()) {
+    return [];
   }
 
   const supabase = await createClient();
@@ -124,8 +130,17 @@ export async function getLiveFeed(limit = 5): Promise<Transaction[]> {
 }
 
 export async function getDashboardStats(): Promise<DashboardStats> {
-  if (!isSupabaseAuthConfigured()) {
+  if (isDevDemoWithoutSupabase()) {
     return { ...DEMO_STATS };
+  }
+  if (!isSupabaseAuthConfigured()) {
+    return {
+      volume24h: 0,
+      transactions24h: 0,
+      parseRate: 0,
+      devicesOnline: 0,
+      devicesTotal: 0,
+    };
   }
 
   const supabase = await createClient();
@@ -189,8 +204,15 @@ export async function getDashboardStats(): Promise<DashboardStats> {
 }
 
 export async function getTransactionsByOperator(): Promise<Record<Operator, { count: number; volume: number }>> {
-  if (!isSupabaseAuthConfigured()) {
+  if (isDevDemoWithoutSupabase()) {
     return { ...DEMO_BY_OPERATOR };
+  }
+  if (!isSupabaseAuthConfigured()) {
+    return {
+      mtn: { count: 0, volume: 0 },
+      moov: { count: 0, volume: 0 },
+      celtiis: { count: 0, volume: 0 },
+    };
   }
 
   const supabase = await createClient();
