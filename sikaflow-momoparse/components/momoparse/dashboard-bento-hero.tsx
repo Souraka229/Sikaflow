@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { formatXof } from "@/lib/format-currency";
 
 const initialChips = [
@@ -14,9 +15,25 @@ const avatars = ["SK", "A", "M", "+2"];
 
 export function DashboardBentoHero() {
   const [chips, setChips] = useState(initialChips);
+  const [seeding, setSeeding] = useState(false);
+  const router = useRouter();
 
   function removeChip(id: string) {
     setChips((c) => c.filter((x) => x.id !== id));
+  }
+
+  async function seedData() {
+    setSeeding(true);
+    try {
+      const res = await fetch("/api/v1/seed", { method: "POST" });
+      if (res.ok) {
+        router.refresh();
+      }
+    } catch (e) {
+      console.error("Seed error:", e);
+    } finally {
+      setSeeding(false);
+    }
   }
 
   return (
@@ -41,6 +58,21 @@ export function DashboardBentoHero() {
         {chips.length === 0 && (
           <span className="text-sm text-mp-muted">Ajoutez des filtres depuis les transactions</span>
         )}
+        <button
+          type="button"
+          onClick={seedData}
+          disabled={seeding}
+          className="ml-auto inline-flex items-center gap-2 rounded-full border border-mp-border bg-mp-surface px-4 py-1.5 text-sm font-semibold text-mp-text sf-card-shadow transition-colors hover:bg-mp-bg disabled:opacity-50"
+        >
+          {seeding ? (
+            <span className="h-4 w-4 animate-spin rounded-full border-2 border-mp-muted border-t-mp-text" />
+          ) : (
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+          )}
+          {seeding ? "Creation..." : "Donnees test"}
+        </button>
       </div>
 
       <div className="relative overflow-hidden rounded-[var(--radius-mp)] bg-[#DFFF00] sf-card-shadow-lg p-6 md:p-8">

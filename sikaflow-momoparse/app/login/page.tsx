@@ -62,10 +62,10 @@ export default function LoginPage() {
             <p className="text-sm font-medium text-mp-muted">
               Nouveau ?{" "}
               <Link
-                href="/dashboard"
+                href="/auth/sign-up"
                 className="font-bold text-mp-text underline decoration-[#DFFF00] decoration-2 underline-offset-4"
               >
-                Ouvrir le tableau de bord
+                Creer un compte
               </Link>
             </p>
             <div className="flex flex-wrap justify-center gap-4">

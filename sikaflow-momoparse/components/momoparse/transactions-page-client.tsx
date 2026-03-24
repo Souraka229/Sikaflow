@@ -3,9 +3,19 @@
 import { Fragment, useState } from "react";
 import { OperatorBadge, StatusBadge, TypeBadge } from "@/components/momoparse/badge";
 import { FilterBar } from "@/components/momoparse/filter-bar";
-import type { LiveTx } from "@/lib/mock-data";
+import type { Transaction } from "@/lib/data/transactions";
 
-type Row = LiveTx & { date: string; rawSms: string };
+interface Row {
+  id: string;
+  date: string;
+  time?: string;
+  operator: "mtn" | "moov" | "celtiis";
+  type: "received" | "sent" | "payment" | "withdrawal";
+  amount: string;
+  reference: string;
+  status: "success" | "failed" | "pending";
+  rawSms: string;
+}
 
 function RefreshIcon({ className }: { className?: string }) {
   return (
@@ -31,8 +41,29 @@ function Chevron({ open }: { open: boolean }) {
   );
 }
 
-export function TransactionsPageClient({ rows }: { rows: Row[] }) {
+export function TransactionsPageClient({ rows }: { rows: (Row | Transaction)[] }) {
   const [expanded, setExpanded] = useState<string | null>(rows[0]?.id ?? null);
+
+  if (rows.length === 0) {
+    return (
+      <div className="space-y-4">
+        <FilterBar />
+        <div className="rounded-[var(--radius-mp-inner)] border border-mp-border bg-mp-surface p-12 sf-card-shadow text-center">
+          <div className="mx-auto max-w-md">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#DFFF00]/20">
+              <svg className="h-8 w-8 text-[#DFFF00]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-bold text-mp-text">Aucune transaction</h3>
+            <p className="mt-2 text-sm text-mp-muted">
+              Vos transactions Mobile Money apparaitront ici une fois que vous aurez connecte une passerelle.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">

@@ -2,10 +2,19 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { PlanBadge } from "@/components/momoparse/badge";
+import { createClient } from "@/lib/supabase/client";
 
 export function DashboardHeader({ plan = "PRO" }: { plan?: "PRO" | "FREE" }) {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
+
+  async function handleLogout() {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/login");
+  }
 
   return (
     <header className="sf-card-shadow shrink-0 border-b border-mp-border bg-mp-surface px-4 py-4 md:px-6">
@@ -72,14 +81,17 @@ export function DashboardHeader({ plan = "PRO" }: { plan?: "PRO" | "FREE" }) {
                   >
                     Clés API
                   </Link>
-                  <Link
-                    href="/login"
+                  <button
+                    type="button"
                     role="menuitem"
-                    className="block px-4 py-2.5 text-sm text-mp-text hover:bg-mp-bg"
-                    onClick={() => setOpen(false)}
+                    className="block w-full px-4 py-2.5 text-left text-sm text-mp-text hover:bg-mp-bg"
+                    onClick={() => {
+                      setOpen(false);
+                      handleLogout();
+                    }}
                   >
-                    Déconnexion (démo)
-                  </Link>
+                    Deconnexion
+                  </button>
                 </div>
               </>
             )}

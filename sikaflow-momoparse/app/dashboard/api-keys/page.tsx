@@ -1,21 +1,23 @@
 import type { Metadata } from "next";
 import { ApiKeysClient } from "@/components/momoparse/api-keys-client";
-import { apiKeysMock } from "@/lib/mock-data";
+import { getApiKeys } from "@/lib/data/api-keys";
 
 export const metadata: Metadata = {
-  title: "Clés API",
+  title: "Cles API",
 };
 
-export default function ApiKeysPage() {
+export default async function ApiKeysPage() {
+  const apiKeys = await getApiKeys();
+
   return (
     <div className="mx-auto max-w-[1920px] space-y-4 pb-10 md:pb-8">
       <div>
-        <h1 className="text-xl font-bold text-mp-text">Clés API</h1>
+        <h1 className="text-xl font-bold text-mp-text">Cles API</h1>
         <p className="mt-1 text-sm font-medium text-mp-muted">
-          Clés hashées côté serveur — affichage unique à la création.
+          Cles hashees cote serveur — affichage unique a la creation.
         </p>
       </div>
-      <ApiKeysClient initialKeys={apiKeysMock} />
+      <ApiKeysClient initialKeys={apiKeys} />
     </div>
   );
 }

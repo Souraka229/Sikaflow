@@ -1,14 +1,30 @@
 import { OperatorBadge, StatusBadge, TypeBadge } from "@/components/momoparse/badge";
-import type { LiveTx } from "@/lib/mock-data";
+import type { Transaction } from "@/lib/data/transactions";
 
-type Row = LiveTx & { date: string };
+interface Row {
+  id: string;
+  date: string;
+  operator: "mtn" | "moov" | "celtiis";
+  type: "received" | "sent" | "payment" | "withdrawal";
+  amount: string;
+  reference: string;
+  status: "success" | "failed" | "pending";
+}
 
-export function RecentTransactionsTable({ rows }: { rows: Row[] }) {
+export function RecentTransactionsTable({ rows }: { rows: Row[] | Transaction[] }) {
   return (
     <div className="overflow-hidden rounded-[var(--radius-mp-inner)] border border-mp-border bg-mp-surface sf-card-shadow">
       <div className="border-b border-mp-border px-4 py-3">
-        <h3 className="text-xs font-bold uppercase tracking-wide text-mp-muted">Transactions récentes</h3>
+        <h3 className="text-xs font-bold uppercase tracking-wide text-mp-muted">Transactions recentes</h3>
       </div>
+      {rows.length === 0 ? (
+        <div className="flex items-center justify-center py-12 text-center">
+          <div>
+            <p className="text-sm text-mp-muted">Aucune transaction</p>
+            <p className="mt-1 text-xs text-mp-muted/70">Vos transactions apparaitront ici</p>
+          </div>
+        </div>
+      ) : (
       <div className="overflow-x-auto">
         <table className="w-full min-w-[640px] border-collapse text-left text-sm">
           <thead>
@@ -48,6 +64,7 @@ export function RecentTransactionsTable({ rows }: { rows: Row[] }) {
           </tbody>
         </table>
       </div>
+      )}
     </div>
   );
 }
