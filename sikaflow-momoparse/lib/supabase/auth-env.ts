@@ -1,7 +1,14 @@
 /**
  * Variables canoniques (documentation Supabase / Vercel) vs faute fréquente SUPERBASE.
- * L’app lit les deux pour ne pas casser les déploiements existants ; il faut renommer sur l’hébergeur.
+ * Les valeurs sont résolues via `env-resolve.ts` (y compris SUPABASE_URL / SUPABASE_ANON_KEY sans NEXT_PUBLIC,
+ * propagées au client par `next.config.ts` au build).
  */
+import {
+  getResolvedSupabasePublicAnonKey,
+  getResolvedSupabasePublicUrl,
+  normalizeSupabaseProjectUrl,
+} from "@/lib/supabase/env-resolve";
+
 const ENV_PUBLIC_URL_OK = "NEXT_PUBLIC_SUPABASE_URL";
 const ENV_PUBLIC_URL_TYPO = "NEXT_PUBLIC_SUPERBASE_URL";
 const ENV_PUBLIC_ANON_OK = "NEXT_PUBLIC_SUPABASE_ANON_KEY";
@@ -11,9 +18,9 @@ const ENV_PUBLIC_PUB_TYPO = "NEXT_PUBLIC_SUPERBASE_PUBLISHABLE_KEY";
 const ENV_SERVER_URL_OK = "SUPABASE_URL";
 const ENV_SERVER_URL_TYPO = "SUPERBASE_URL";
 
-/** Évite les doubles slashes et les URLs mal formées côté client Supabase. */
+/** @deprecated alias — utiliser normalizeSupabaseProjectUrl */
 export function normalizeSupabaseUrl(url: string): string {
-  return url.trim().replace(/\/+$/, "");
+  return normalizeSupabaseProjectUrl(url);
 }
 
 function firstTrimmedEnv(...keys: string[]): string | undefined {
@@ -55,9 +62,7 @@ export function usesTypoSupabaseEnvNames(): boolean {
 
 /** URL projet pour auth navigateur + SSR (@supabase/ssr). */
 export function getSupabasePublicUrl(): string | undefined {
-  const u = firstTrimmedEnv(ENV_PUBLIC_URL_OK, ENV_PUBLIC_URL_TYPO);
-  if (!u) return undefined;
-  return normalizeSupabaseUrl(u);
+  return getResolvedSupabasePublicUrl();
 }
 
 /**
@@ -66,8 +71,8 @@ export function getSupabasePublicUrl(): string | undefined {
  */
 export function getSupabaseAdminProjectUrl(): string | undefined {
   const direct = firstTrimmedEnv(ENV_SERVER_URL_OK, ENV_SERVER_URL_TYPO);
-  if (direct) return normalizeSupabaseUrl(direct);
-  return getSupabasePublicUrl();
+  if (direct) return normalizeSupabaseProjectUrl(direct);
+  return getResolvedSupabasePublicUrl();
 }
 
 /**
@@ -75,9 +80,7 @@ export function getSupabaseAdminProjectUrl(): string | undefined {
  * Les deux remplissent le même rôle pour @supabase/ssr en navigateur.
  */
 export function getSupabasePublicAnonKey(): string | undefined {
-  const anon = firstTrimmedEnv(ENV_PUBLIC_ANON_OK, ENV_PUBLIC_ANON_TYPO);
-  const publishable = firstTrimmedEnv(ENV_PUBLIC_PUB_OK, ENV_PUBLIC_PUB_TYPO);
-  return anon || publishable || undefined;
+  return getResolvedSupabasePublicAnonKey();
 }
 
 /**
@@ -108,18 +111,20 @@ export function getSupabaseAuthMissingMessage(): string {
         ? ` Vous avez des variables en SUPERBASE : ${typo.join(" ; ")}.`
         : "";
     return (
-      "Supabase n’est pas configuré. Ajoutez NEXT_PUBLIC_SUPABASE_URL et NEXT_PUBLIC_SUPABASE_ANON_KEY " +
-      "(ou NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) dans .env.local — orthographe SUPABASE (avec P), pas SUPERBASE." +
+      "Supabase n’est pas configuré. Ajoutez l’URL et une clé publique : " +
+      "NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_ANON_KEY (ou PUBLISHABLE_KEY), " +
+      "ou bien SUPABASE_URL + SUPABASE_ANON_KEY (le build les recopie pour le client). " +
+      "Orthographe SUPABASE (avec P), pas SUPERBASE." +
       typoLine +
       " (voir .env.example), puis redémarrez le serveur de développement."
     );
   }
   return (
     "L’inscription et la connexion par compte ne sont pas actives sur ce déploiement : " +
-    "les variables NEXT_PUBLIC_SUPABASE_URL et une clé publique (NEXT_PUBLIC_SUPABASE_ANON_KEY ou NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) ne sont pas présentes dans le build. " +
-    "Vérifiez l’orthographe : SUPABASE (avec un P), pas SUPERBASE. " +
-    "Dans l’hébergeur (ex. Vercel → Settings → Environment Variables), corrigez les noms si besoin, enregistrez, puis redéployez — " +
-    "les variables NEXT_PUBLIC_* sont figées au moment du build."
+    "aucune URL / clé publique détectée pour le build. " +
+    "Sur Vercel : NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_ANON_KEY ou NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, " +
+    "ou seulement SUPABASE_URL + SUPABASE_ANON_KEY (sans NEXT_PUBLIC) — le projet recopie ces valeurs au build. " +
+    "Vérifiez l’orthographe SUPABASE (avec P), pas SUPERBASE. Redéployez après modification."
   );
 }
 
@@ -131,5 +136,5 @@ export function getSupabaseDemoLoginHint(): string {
   if (isDevDemoWithoutSupabase()) {
     return "Mode démo (dev uniquement) : sans Supabase dans .env.local, « Se connecter » ouvre le tableau de bord sans vérifier email/mot de passe.";
   }
-  return "La connexion sécurisée nécessite Supabase sur ce serveur (NEXT_PUBLIC_SUPABASE_URL + clé publique), puis un redéploiement.";
+  return "La connexion nécessite l’URL Supabase et une clé publique (NEXT_PUBLIC_* ou SUPABASE_URL + SUPABASE_ANON_KEY), puis un redéploiement.";
 }

@@ -1,8 +1,14 @@
 import type { NextConfig } from "next";
 import path from "node:path";
+import { buildSupabaseClientEnv } from "./lib/supabase/env-resolve";
 
 /** Ancre Turbopack sur ce dossier (évite la détection d’un mauvais root si un lockfile parent existe). */
 const nextConfig: NextConfig = {
+  /**
+   * Si Vercel ne fournit que SUPABASE_URL / SUPABASE_ANON_KEY (sans NEXT_PUBLIC_*),
+   * on les recopie ici pour que le navigateur reçoive les bonnes valeurs au build.
+   */
+  env: buildSupabaseClientEnv(),
   /** Masque le bouton flottant « N » (dev indicator) en développement. */
   devIndicators: false,
   turbopack: {
