@@ -3,6 +3,7 @@
 import { Fragment, useState } from "react";
 import { OperatorBadge, StatusBadge, TypeBadge } from "@/components/momoparse/badge";
 import { FilterBar } from "@/components/momoparse/filter-bar";
+import { SmsInsight } from "@/components/momoparse/sms-insight";
 import type { Transaction } from "@/lib/data/transactions";
 
 interface Row {
@@ -95,10 +96,13 @@ export function TransactionsPageClient({ rows }: { rows: (Row | Transaction)[] }
               </button>
               {isOpen && (
                 <div className="border-t border-mp-border px-4 py-4">
+                  <div className="mb-3">
+                    <SmsInsight rawSms={r.rawSms} />
+                  </div>
                   <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-mp-muted">
                     SMS brut
                   </p>
-                  <pre className="max-h-40 overflow-auto rounded-[var(--radius-mp-inner)] border border-mp-border bg-mp-bg p-3 font-mono text-[11px] leading-relaxed text-mp-text">
+                  <pre className="max-h-48 overflow-auto whitespace-pre-wrap break-words rounded-[var(--radius-mp-inner)] border border-mp-border bg-mp-bg p-3 font-mono text-[11px] leading-relaxed text-mp-text">
                     {r.rawSms}
                   </pre>
                   {r.status === "failed" && (
@@ -176,10 +180,13 @@ export function TransactionsPageClient({ rows }: { rows: (Row | Transaction)[] }
                     {isOpen && (
                       <tr className="bg-mp-bg">
                         <td colSpan={8} className="px-4 py-4">
+                          <div className="mb-3">
+                            <SmsInsight rawSms={r.rawSms} />
+                          </div>
                           <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-mp-muted">
                             SMS brut
                           </p>
-                          <pre className="max-h-48 overflow-auto rounded-[var(--radius-mp-inner)] border border-mp-border bg-mp-surface p-4 font-mono text-xs leading-relaxed text-mp-text">
+                          <pre className="max-h-48 overflow-auto whitespace-pre-wrap break-words rounded-[var(--radius-mp-inner)] border border-mp-border bg-mp-surface p-4 font-mono text-xs leading-relaxed text-mp-text">
                             {r.rawSms}
                           </pre>
                         </td>

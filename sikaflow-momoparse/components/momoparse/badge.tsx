@@ -1,4 +1,4 @@
-import type { Operator, TxStatus, TxType } from "@/lib/mock-data";
+import type { Operator, TxStatus, TxType } from "@/lib/data/transactions";
 
 const operatorClass: Record<Operator, string> = {
   mtn: "bg-neutral-100 text-neutral-900 border-neutral-200",

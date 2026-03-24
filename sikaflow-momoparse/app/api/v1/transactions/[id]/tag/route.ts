@@ -2,6 +2,7 @@ import { authorizeApiRequest } from "@/lib/api/authorize";
 import { apiOptionsResponse } from "@/lib/api/options";
 import { jsonError, jsonSuccess } from "@/lib/api/response";
 import { tagBodySchema } from "@/lib/api/schemas";
+import { resolveQueryTenantId } from "@/lib/api/tenant-scope";
 import { svcGetTransactionById, svcTagTransaction } from "@/lib/api/transaction-service";
 
 type Ctx = { params: Promise<{ id: string }> };
@@ -11,13 +12,15 @@ export async function OPTIONS() {
 }
 
 export async function POST(request: Request, context: Ctx) {
-  const auth = authorizeApiRequest(request);
+  const auth = await authorizeApiRequest(request);
   if (!auth.ok) return auth.response;
+
+  const tenantId = resolveQueryTenantId(auth.tenantId);
 
   const { id } = await context.params;
   let existing: Awaited<ReturnType<typeof svcGetTransactionById>>;
   try {
-    existing = await svcGetTransactionById(id);
+    existing = await svcGetTransactionById(id, tenantId);
   } catch {
     return jsonError("Erreur lors de la lecture de la transaction.", 500);
   }
@@ -39,10 +42,14 @@ export async function POST(request: Request, context: Ctx) {
 
   let updated: Awaited<ReturnType<typeof svcTagTransaction>>;
   try {
-    updated = await svcTagTransaction(id, {
-      externalRef: parsed.data.external_ref,
-      metadata: parsed.data.metadata,
-    });
+    updated = await svcTagTransaction(
+      id,
+      {
+        externalRef: parsed.data.external_ref,
+        metadata: parsed.data.metadata,
+      },
+      tenantId,
+    );
   } catch {
     return jsonError("Erreur lors de la mise à jour de la transaction.", 500);
   }

@@ -2,6 +2,7 @@ import { authorizeApiRequest } from "@/lib/api/authorize";
 import { apiOptionsResponse } from "@/lib/api/options";
 import { jsonError, jsonSuccess } from "@/lib/api/response";
 import { listTransactionsQuery, parseOptionalIso } from "@/lib/api/schemas";
+import { resolveQueryTenantId } from "@/lib/api/tenant-scope";
 import { svcListTransactions } from "@/lib/api/transaction-service";
 
 export async function OPTIONS() {
@@ -9,8 +10,10 @@ export async function OPTIONS() {
 }
 
 export async function GET(request: Request) {
-  const auth = authorizeApiRequest(request);
+  const auth = await authorizeApiRequest(request);
   if (!auth.ok) return auth.response;
+
+  const tenantId = resolveQueryTenantId(auth.tenantId);
 
   const raw = Object.fromEntries(new URL(request.url).searchParams);
   const parsed = listTransactionsQuery.safeParse(raw);
@@ -23,16 +26,19 @@ export async function GET(request: Request) {
   const to = parseOptionalIso(q.to);
 
   try {
-    const { items, total, nextCursor } = await svcListTransactions({
-      operator: q.operator,
-      type: q.type,
-      status: q.status,
-      reference: q.reference,
-      from,
-      to,
-      limit: q.limit,
-      cursor: q.cursor,
-    });
+    const { items, total, nextCursor } = await svcListTransactions(
+      {
+        operator: q.operator,
+        type: q.type,
+        status: q.status,
+        reference: q.reference,
+        from,
+        to,
+        limit: q.limit,
+        cursor: q.cursor,
+      },
+      tenantId,
+    );
     return jsonSuccess(
       {
         success: true as const,

@@ -8,9 +8,7 @@ export const metadata: Metadata = {
 };
 
 export default function DocsPage() {
-  const demoKey =
-    process.env.SIKAFLOW_DOCS_DEMO_KEY?.trim() ||
-    (process.env.NODE_ENV === "development" ? "mklive_dev_sikaflow_local" : "");
+  const demoKey = process.env.SIKAFLOW_DOCS_DEMO_KEY?.trim() ?? "";
 
   return (
     <div className="mx-auto max-w-[1920px] space-y-8 pb-10 md:pb-8">

@@ -54,12 +54,6 @@ export function computeStatsFromRows(rows: PublicTransactionDetail[]) {
     },
     byOperator: byOp(monthRows),
     byType: byTypeFn(monthRows),
-    gatewayStatus: [
-      {
-        deviceId: "dev_demo_01",
-        lastPing: new Date().toISOString(),
-        isOnline: true,
-      },
-    ],
+    gatewayStatus: [],
   };
 }

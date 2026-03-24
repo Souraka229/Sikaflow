@@ -32,3 +32,13 @@ export function isSupabaseConfigured(): boolean {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() || "";
   return Boolean(url && key);
 }
+
+/**
+ * Filtre optionnel pour les requêtes authentifiées par clé d’environnement (`SIKAFLOW_API_*`).
+ * Doit correspondre à `tenant_id` en base (souvent l’UUID utilisateur Auth).
+ * Les clés créées dans le tableau de bord appliquent automatiquement le bon tenant.
+ */
+export function getApiEnvTenantScope(): string | undefined {
+  const t = process.env.SIKAFLOW_API_TENANT_ID?.trim();
+  return t || undefined;
+}

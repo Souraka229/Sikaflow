@@ -1,6 +1,7 @@
 import { authorizeApiRequest } from "@/lib/api/authorize";
 import { apiOptionsResponse } from "@/lib/api/options";
 import { jsonError, jsonSuccess } from "@/lib/api/response";
+import { resolveQueryTenantId } from "@/lib/api/tenant-scope";
 import { svcGetTransactionById } from "@/lib/api/transaction-service";
 
 type Ctx = { params: Promise<{ id: string }> };
@@ -10,13 +11,15 @@ export async function OPTIONS() {
 }
 
 export async function GET(request: Request, context: Ctx) {
-  const auth = authorizeApiRequest(request);
+  const auth = await authorizeApiRequest(request);
   if (!auth.ok) return auth.response;
+
+  const tenantId = resolveQueryTenantId(auth.tenantId);
 
   const { id } = await context.params;
   let row: Awaited<ReturnType<typeof svcGetTransactionById>>;
   try {
-    row = await svcGetTransactionById(id);
+    row = await svcGetTransactionById(id, tenantId);
   } catch {
     return jsonError("Erreur lors de la lecture de la transaction.", 500);
   }

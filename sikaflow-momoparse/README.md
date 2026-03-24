@@ -67,16 +67,15 @@ cp .env.example .env.local
 
 | Variable | Obligatoire en prod | Description |
 | --- | --- | --- |
-| `SIKAFLOW_API_KEYS` | **Oui** | Clés API séparées par des virgules. Sans elles, l’API renvoie **503** en production. |
-| `SIKAFLOW_API_KEY` | Alternative | Une seule clé (si vous ne utilisez pas `SIKAFLOW_API_KEYS`). |
+| `SIKAFLOW_API_KEYS` | Conditionnelle | Clés API séparées par des virgules (machine / intégrations). |
+| `SIKAFLOW_API_KEY` | Alternative | Une seule clé si vous n’utilisez pas `SIKAFLOW_API_KEYS`. |
+| `SIKAFLOW_API_TENANT_ID` | Non | UUID utilisateur Auth : limite les lectures API pour les clés « env » au `tenant_id` correspondant. |
 | `SIKAFLOW_CORS_ORIGIN` | Non | Origine autorisée pour les réponses API (ex. `https://app.example.com`). Défaut : `*`. |
 | `SUPABASE_URL` | Non* | URL du projet Supabase. |
-| `SUPABASE_SERVICE_ROLE_KEY` | Non* | Clé **service role** (serveur uniquement, jamais exposée au client). |
+| `SUPABASE_SERVICE_ROLE_KEY` | Non* | Clé **service role** : persistance `/api/v1` sur PostgreSQL + validation des clés créées dans le dashboard. |
 | `SIKAFLOW_DOCS_DEMO_KEY` | Non | Préremplit le champ clé du playground documentation. Éviter une clé de prod sur un repo public. |
 
-\* **Recommandé** sur Vercel : sans Supabase, les données API utilisent un **store mémoire** (non durable entre cold starts).
-
-**Développement** : si aucune clé n’est définie, une clé de dev est acceptée (voir `lib/api/auth.ts`).
+\* **Production** : configurez au moins `SIKAFLOW_API_*` **ou** `SUPABASE_SERVICE_ROLE_KEY` (sinon **503** sur l’API). Sans service role, l’API utilise un **store mémoire vide** (non durable).
 
 ---
 

@@ -246,12 +246,11 @@ ${snippetTab === "curl" ? curlExample(active, base || "https://app.sikaflow.com"
             X-Api-Key: {apiKey.trim() || "…"}
           </pre>
           <p className="mt-2 text-xs text-mp-muted">
-            En production, définissez <code className="font-mono">SIKAFLOW_API_KEYS</code> sur le serveur
-            (plusieurs clés séparées par des virgules). En dev sans variable : clé par défaut{" "}
-            <code className="rounded bg-[#DFFF00]/40 px-1 font-mono text-black">
-              mklive_dev_sikaflow_local
-            </code>
-            .
+            Utilisez une clé créée dans <strong>Clés API</strong> (stockée en base, hashée) ou une clé
+            définie dans <code className="font-mono">SIKAFLOW_API_KEYS</code> sur le serveur. Pour les
+            clés d’environnement uniquement, définissez éventuellement{" "}
+            <code className="font-mono">SIKAFLOW_API_TENANT_ID</code> (UUID utilisateur) pour limiter les
+            lectures à votre tenant.
           </p>
         </div>
 
@@ -328,7 +327,7 @@ ${snippetTab === "curl" ? curlExample(active, base || "https://app.sikaflow.com"
         <input
           value={apiKey}
           onChange={(e) => setApiKey(e.target.value)}
-          placeholder="mklive_…"
+          placeholder="sfk_… ou clé SIKAFLOW_API_KEYS"
           className="mt-1 h-10 w-full rounded-full border border-mp-border bg-mp-bg px-3 font-mono text-xs outline-none focus:ring-2 focus:ring-[#DFFF00]/50"
         />
         <button

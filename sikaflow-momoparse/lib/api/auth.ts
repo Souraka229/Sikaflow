@@ -3,19 +3,15 @@ import { timingSafeEqual } from "node:crypto";
 /**
  * Clés acceptées : variable d’environnement `SIKAFLOW_API_KEYS` (séparées par des virgules)
  * ou une seule `SIKAFLOW_API_KEY`.
- * En développement uniquement, si aucune clé n’est définie : `mklive_dev_sikaflow_local`.
+ * Les clés créées dans le tableau de bord sont validées en base (hash) — voir `authorizeApiRequest`.
  */
 export function getValidApiKeys(): string[] {
   const raw =
     process.env.SIKAFLOW_API_KEYS ?? process.env.SIKAFLOW_API_KEY ?? "";
-  const keys = raw
+  return raw
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
-  if (keys.length === 0 && process.env.NODE_ENV === "development") {
-    return ["mklive_dev_sikaflow_local"];
-  }
-  return keys;
 }
 
 export function validateApiKey(provided: string | null | undefined): boolean {

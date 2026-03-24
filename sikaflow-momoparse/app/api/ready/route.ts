@@ -11,11 +11,12 @@ import {
 } from "@/lib/supabase/auth-env";
 
 /**
- * Prêt pour le trafic : en production, exige des clés API configurées.
- * Utile pour les checks de déploiement (Vercel, K8s, etc.).
+ * Prêt pour le trafic : en production, exige des clés API env et/ou Supabase service role
+ * (pour les clés créées dans l’application).
  */
 export async function GET() {
-  const apiKeysOk = !isProduction() || hasConfiguredApiKeys();
+  const apiKeysOk =
+    !isProduction() || hasConfiguredApiKeys() || isSupabaseConfigured();
   const supabaseAuth = isSupabaseAuthConfigured();
   const body = {
     ok: apiKeysOk,

@@ -61,33 +61,41 @@ function fromDbRow(r: DbRow): PublicTransactionDetail {
   };
 }
 
-async function loadRowsForList(): Promise<PublicTransactionDetail[]> {
+async function loadRowsForList(
+  tenantId?: string,
+): Promise<PublicTransactionDetail[]> {
   const client = getSupabaseAdmin();
-  const { data, error } = await client
+  let q = client
     .from(TABLE)
     .select("*")
     .order("received_at", { ascending: false })
     .limit(FETCH_CAP);
+  if (tenantId) {
+    q = q.eq("tenant_id", tenantId);
+  }
+  const { data, error } = await q;
   if (error) throw new Error(error.message);
   return (data as DbRow[] | null)?.map(fromDbRow) ?? [];
 }
 
 export async function listTransactionsSupabase(
-  filters: ListTransactionsFilters
+  filters: ListTransactionsFilters,
+  tenantId?: string,
 ) {
-  const rows = await loadRowsForList();
+  const rows = await loadRowsForList(tenantId);
   return listTransactionsFromRows(rows, filters);
 }
 
 export async function getTransactionByIdSupabase(
-  id: string
+  id: string,
+  tenantId?: string,
 ): Promise<PublicTransactionDetail | undefined> {
   const client = getSupabaseAdmin();
-  const { data, error } = await client
-    .from(TABLE)
-    .select("*")
-    .eq("id", id)
-    .maybeSingle();
+  let q = client.from(TABLE).select("*").eq("id", id);
+  if (tenantId) {
+    q = q.eq("tenant_id", tenantId);
+  }
+  const { data, error } = await q.maybeSingle();
   if (error) throw new Error(error.message);
   if (!data) return undefined;
   return fromDbRow(data as DbRow);
@@ -95,10 +103,11 @@ export async function getTransactionByIdSupabase(
 
 export async function tagTransactionSupabase(
   id: string,
-  payload: { externalRef?: string; metadata?: Record<string, unknown> }
+  payload: { externalRef?: string; metadata?: Record<string, unknown> },
+  tenantId?: string,
 ): Promise<PublicTransactionDetail | undefined> {
   const client = getSupabaseAdmin();
-  const existing = await getTransactionByIdSupabase(id);
+  const existing = await getTransactionByIdSupabase(id, tenantId);
   if (!existing) return undefined;
 
   const nextExternal =
@@ -110,22 +119,24 @@ export async function tagTransactionSupabase(
       ? { ...(existing.metadata ?? {}), ...payload.metadata }
       : existing.metadata;
 
-  const { data, error } = await client
+  let updateQ = client
     .from(TABLE)
     .update({
       external_ref: nextExternal,
       metadata: nextMeta,
     })
-    .eq("id", id)
-    .select("*")
-    .single();
+    .eq("id", id);
+  if (tenantId) {
+    updateQ = updateQ.eq("tenant_id", tenantId);
+  }
+  const { data, error } = await updateQ.select("*").single();
 
   if (error) throw new Error(error.message);
   if (!data) return undefined;
   return fromDbRow(data as DbRow);
 }
 
-export async function computeStatsSupabase() {
-  const rows = await loadRowsForList();
+export async function computeStatsSupabase(tenantId?: string) {
+  const rows = await loadRowsForList(tenantId);
   return computeStatsFromRows(rows);
 }

@@ -91,14 +91,6 @@ export function isSupabaseAuthConfigured(): boolean {
   return Boolean(getSupabasePublicUrl() && getSupabasePublicAnonKey());
 }
 
-/**
- * Démo locale (`next dev` uniquement) : données fictives + accès dashboard sans mot de passe.
- * En production (Vercel, `next start`), toujours false — connexion et données réelles uniquement via Supabase.
- */
-export function isDevDemoWithoutSupabase(): boolean {
-  return process.env.NODE_ENV === "development" && !isSupabaseAuthConfigured();
-}
-
 /** Message utilisateur final (pas de jargon Vercel / NEXT_PUBLIC). */
 export const USER_MSG_AUTH_UNAVAILABLE =
   "Connexion indisponible pour le moment. Réessayez plus tard.";
@@ -124,9 +116,6 @@ export function getSupabaseAuthMissingMessage(): string {
 export function getSupabaseDemoLoginHint(): string {
   if (isSupabaseAuthConfigured()) {
     return "Utilisez vos identifiants pour accéder au tableau de bord.";
-  }
-  if (isDevDemoWithoutSupabase()) {
-    return "Mode démo (dev) : sans Supabase, la connexion ouvre le tableau de bord sans mot de passe.";
   }
   return USER_MSG_AUTH_UNAVAILABLE;
 }

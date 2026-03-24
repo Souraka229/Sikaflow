@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LoginForm } from "@/components/landing/login-form";
-import { formatXof } from "@/lib/format-currency";
 
 export const metadata: Metadata = {
   title: "Connexion",
@@ -29,19 +28,11 @@ export default function LoginPage() {
           </div>
 
           <div className="overflow-hidden rounded-[var(--radius-mp)] bg-[#DFFF00] p-6 sf-card-shadow-lg">
-            <p className="text-sm font-bold text-black">Performance aperçu</p>
-            <p className="mt-4 text-4xl font-bold tabular-nums text-black">{formatXof(90_744)}</p>
-            <p className="text-xs font-bold text-black/60">Exemple sur 24 h</p>
-            <div className="mt-4 grid grid-cols-2 gap-2">
-              <div className="rounded-[var(--radius-mp-inner)] bg-white/90 p-3 sf-card-shadow">
-                <p className="text-[10px] font-bold uppercase text-mp-muted">Parse</p>
-                <p className="text-lg font-bold text-mp-text">98,5 %</p>
-              </div>
-              <div className="rounded-[var(--radius-mp-inner)] bg-white/90 p-3 sf-card-shadow">
-                <p className="text-[10px] font-bold uppercase text-mp-muted">Tx / 24h</p>
-                <p className="text-lg font-bold text-mp-text">42</p>
-              </div>
-            </div>
+            <p className="text-sm font-bold text-black">Données réelles uniquement</p>
+            <p className="mt-3 text-sm font-medium leading-relaxed text-black/80">
+              Après connexion, le tableau de bord lit vos transactions, appareils et clés API depuis Supabase.
+              Aucune donnée factice : états vides tant que rien n’a été ingéré.
+            </p>
           </div>
         </div>
         <p className="absolute bottom-8 left-10 text-[10px] font-bold uppercase tracking-widest text-mp-muted lg:left-12">

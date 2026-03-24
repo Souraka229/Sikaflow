@@ -18,27 +18,32 @@ function persistenceUsesSupabase(): boolean {
   return isSupabaseConfigured();
 }
 
-export async function svcListTransactions(filters: ListTransactionsFilters) {
-  if (persistenceUsesSupabase()) return listTransactionsSupabase(filters);
+export async function svcListTransactions(
+  filters: ListTransactionsFilters,
+  tenantId?: string,
+) {
+  if (persistenceUsesSupabase()) return listTransactionsSupabase(filters, tenantId);
   return listTransactions(filters);
 }
 
 export async function svcGetTransactionById(
-  id: string
+  id: string,
+  tenantId?: string,
 ): Promise<PublicTransactionDetail | undefined> {
-  if (persistenceUsesSupabase()) return getTransactionByIdSupabase(id);
+  if (persistenceUsesSupabase()) return getTransactionByIdSupabase(id, tenantId);
   return getTransactionById(id);
 }
 
 export async function svcTagTransaction(
   id: string,
-  payload: { externalRef?: string; metadata?: Record<string, unknown> }
+  payload: { externalRef?: string; metadata?: Record<string, unknown> },
+  tenantId?: string,
 ): Promise<PublicTransactionDetail | undefined> {
-  if (persistenceUsesSupabase()) return tagTransactionSupabase(id, payload);
+  if (persistenceUsesSupabase()) return tagTransactionSupabase(id, payload, tenantId);
   return tagTransaction(id, payload);
 }
 
-export async function svcComputeStats() {
-  if (persistenceUsesSupabase()) return computeStatsSupabase();
+export async function svcComputeStats(tenantId?: string) {
+  if (persistenceUsesSupabase()) return computeStatsSupabase(tenantId);
   return computeStats();
 }

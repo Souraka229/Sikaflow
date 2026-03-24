@@ -2,10 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { DashboardShell } from "@/components/momoparse/dashboard-shell";
 import { createClient } from "@/lib/supabase/server";
-import {
-  isDevDemoWithoutSupabase,
-  isSupabaseAuthConfigured,
-} from "@/lib/supabase/auth-env";
+import { isSupabaseAuthConfigured } from "@/lib/supabase/auth-env";
 
 export const metadata: Metadata = {
   description: "Espace Sika FLOW — analytics Mobile Money, API et appareils.",
@@ -13,10 +10,7 @@ export const metadata: Metadata = {
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   if (!isSupabaseAuthConfigured()) {
-    if (!isDevDemoWithoutSupabase()) {
-      redirect("/login");
-    }
-    return <DashboardShell>{children}</DashboardShell>;
+    redirect("/login");
   }
 
   const supabase = await createClient();
