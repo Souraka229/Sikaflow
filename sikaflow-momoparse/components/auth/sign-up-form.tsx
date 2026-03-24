@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useSupabaseBrowser } from "@/components/supabase/supabase-browser-provider";
+import { getAuthCallbackAbsoluteUrl } from "@/lib/app-url";
 import { USER_MSG_SIGNUP_UNAVAILABLE } from "@/lib/supabase/auth-env";
 
 export function SignUpForm() {
@@ -51,11 +52,18 @@ export function SignUpForm() {
         return;
       }
 
+      const redirectTo = getAuthCallbackAbsoluteUrl();
+      if (!redirectTo) {
+        setError("Impossible de déterminer l’adresse de l’application pour la confirmation par e-mail.");
+        setPending(false);
+        return;
+      }
+
       const { error: authError } = await client.auth.signUp({
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          emailRedirectTo: redirectTo,
           data: {
             full_name: formData.get("fullName") || "",
           },
