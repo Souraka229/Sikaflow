@@ -22,10 +22,8 @@ export function listTransactionsFromRows(
   rows: PublicTransactionDetail[],
   filters: ListTransactionsFilters
 ): { items: PublicTransaction[]; total: number; nextCursor: string | null } {
-  let list = [...rows].sort(
-    (a, b) =>
-      new Date(b.receivedAt).getTime() - new Date(a.receivedAt).getTime()
-  );
+  // Rows are already sorted by receivedAt DESC from the store layer, so no need to sort again
+  let list = [...rows];
   if (filters.operator) {
     list = list.filter((r) => r.operator === filters.operator);
   }

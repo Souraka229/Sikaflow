@@ -156,9 +156,9 @@ export async function getDashboardStats(): Promise<DashboardStats> {
   }
 
   const txList = transactions || [];
-  const volume24h = txList.reduce((sum, tx) => sum + (tx.amount || 0), 0);
-  const successCount = txList.filter((tx) => tx.status === "success").length;
-  const parseRate = txList.length > 0 ? (successCount / txList.length) * 100 : 100;
+  const successTxs = txList.filter((tx) => tx.status === "success");
+  const volume24h = successTxs.reduce((sum, tx) => sum + (tx.amount || 0), 0);
+  const parseRate = txList.length > 0 ? (successTxs.length / txList.length) * 100 : 100;
 
   // Get devices
   const { data: devices, error: devError } = await supabase
@@ -181,7 +181,7 @@ export async function getDashboardStats(): Promise<DashboardStats> {
 
   return {
     volume24h,
-    transactions24h: txList.length,
+    transactions24h: successTxs.length,
     parseRate: Math.round(parseRate * 10) / 10,
     devicesOnline,
     devicesTotal: deviceList.length,

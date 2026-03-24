@@ -46,6 +46,7 @@ export async function GET(request: Request) {
       {
         headers: {
           "X-RateLimit-Remaining": String(auth.remaining),
+          "X-RateLimit-Reset": String(auth.resetAt),
         },
       }
     );

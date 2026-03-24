@@ -51,7 +51,7 @@ function fromDbRow(r: DbRow): PublicTransactionDetail {
     type: assertTxType(r.type),
     status: assertStatus(r.status),
     amount: Number(r.amount),
-    currency: r.currency === "XOF" ? "XOF" : "XOF",
+    currency: "XOF",
     reference: r.reference,
     counterparty: r.counterparty,
     receivedAt: new Date(r.received_at).toISOString(),
@@ -63,7 +63,6 @@ function fromDbRow(r: DbRow): PublicTransactionDetail {
 
 async function loadRowsForList(): Promise<PublicTransactionDetail[]> {
   const client = getSupabaseAdmin();
-  if (!client) return [];
   const { data, error } = await client
     .from(TABLE)
     .select("*")
@@ -84,7 +83,6 @@ export async function getTransactionByIdSupabase(
   id: string
 ): Promise<PublicTransactionDetail | undefined> {
   const client = getSupabaseAdmin();
-  if (!client) return undefined;
   const { data, error } = await client
     .from(TABLE)
     .select("*")
@@ -100,7 +98,6 @@ export async function tagTransactionSupabase(
   payload: { externalRef?: string; metadata?: Record<string, unknown> }
 ): Promise<PublicTransactionDetail | undefined> {
   const client = getSupabaseAdmin();
-  if (!client) return undefined;
   const existing = await getTransactionByIdSupabase(id);
   if (!existing) return undefined;
 
