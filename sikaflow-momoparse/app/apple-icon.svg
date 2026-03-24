@@ -1,18 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 512 512" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
   <defs>
-    <linearGradient id="sf-bg" x1="64" y1="56" x2="448" y2="456" gradientUnits="userSpaceOnUse">
+    <linearGradient id="sf-bg-a" x1="64" y1="56" x2="448" y2="456" gradientUnits="userSpaceOnUse">
       <stop stop-color="#F2FF5C"/>
       <stop offset="0.45" stop-color="#DFFF00"/>
       <stop offset="1" stop-color="#A6CF00"/>
     </linearGradient>
-    <radialGradient id="sf-glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(178 142) rotate(98) scale(320 380)">
+    <radialGradient id="sf-glow-a" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(178 142) rotate(98) scale(320 380)">
       <stop stop-color="#fff" stop-opacity="0.45"/>
       <stop offset="0.35" stop-color="#fff" stop-opacity="0.08"/>
       <stop offset="1" stop-color="#fff" stop-opacity="0"/>
     </radialGradient>
   </defs>
-  <rect width="512" height="512" rx="112" fill="url(#sf-bg)"/>
-  <rect width="512" height="512" rx="112" fill="url(#sf-glow)"/>
+  <rect width="512" height="512" rx="112" fill="url(#sf-bg-a)"/>
+  <rect width="512" height="512" rx="112" fill="url(#sf-glow-a)"/>
   <g stroke="#0A0A0A" stroke-width="38" stroke-linecap="round" stroke-linejoin="round">
     <path d="M 108 372 Q 258 252 404 148"/>
     <path d="M 108 372 Q 258 292 404 236"/>

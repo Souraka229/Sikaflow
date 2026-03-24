@@ -1,4 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" fill="none">
-  <rect width="512" height="512" rx="108" fill="#DFFF00"/>
-  <path d="M138 342V150h54l64 128 64-128h54v192H388V234L300 410h-32L174 234v108H138z" fill="#0A0A0A"/>
+  <defs>
+    <linearGradient id="sf-bg" x1="64" y1="56" x2="448" y2="456" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F2FF5C"/>
+      <stop offset="0.45" stop-color="#DFFF00"/>
+      <stop offset="1" stop-color="#A6CF00"/>
+    </linearGradient>
+    <radialGradient id="sf-glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(178 142) rotate(98) scale(320 380)">
+      <stop stop-color="#fff" stop-opacity="0.45"/>
+      <stop offset="0.35" stop-color="#fff" stop-opacity="0.08"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#sf-bg)"/>
+  <rect width="512" height="512" rx="112" fill="url(#sf-glow)"/>
+  <g stroke="#0A0A0A" stroke-width="38" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 108 372 Q 258 252 404 148"/>
+    <path d="M 108 372 Q 258 292 404 236"/>
+    <path d="M 108 372 Q 258 332 404 324"/>
+  </g>
+  <circle cx="404" cy="372" r="46" fill="#0A0A0A"/>
+  <circle cx="404" cy="372" r="18" fill="#DFFF00"/>
 </svg>
