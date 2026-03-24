@@ -1,0 +1,12 @@
+{
+  "name": "nouveau-dossier-workspace",
+  "private": true,
+  "description": "Point d'entrée npm à la racine du dossier — l'app MoMoParse est dans sikaflow-momoparse.",
+  "scripts": {
+    "dev": "npm run dev --prefix ./sikaflow-momoparse",
+    "build": "npm run build --prefix ./sikaflow-momoparse",
+    "start": "npm run start --prefix ./sikaflow-momoparse",
+    "lint": "npm run lint --prefix ./sikaflow-momoparse",
+    "install:app": "npm install --prefix ./sikaflow-momoparse"
+  }
+}

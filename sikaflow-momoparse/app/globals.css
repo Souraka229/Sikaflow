@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+/* MoMoParse / SikaFlow — design tokens (Tailwind v4 @theme) */
+@theme inline {
+  --color-mp-bg: #0c0c0c;
+  --color-mp-surface: #1a1a1a;
+  --color-mp-accent: #ff6b35;
+  --color-mp-accent-hover: #e55a2a;
+  --color-mp-border: rgba(255, 255, 255, 0.08);
+  --color-mp-text: rgba(255, 255, 255, 0.92);
+  --color-mp-muted: rgba(255, 255, 255, 0.55);
+  --color-mp-mtn: #ff6b35;
+  --color-mp-moov: #6b4eff;
+  --color-mp-celtiis: #2d9cdb;
+  --color-mp-received: #00c48c;
+  --color-mp-sent: #ff5c5c;
+  --color-mp-payment: #0099ff;
+  --color-mp-success: #00c48c;
+  --color-mp-failed: #ff5c5c;
+  --color-mp-pending: #ff6b35;
+  --radius-mp: 8px;
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+@layer base {
+  html {
+    height: 100%;
+  }
+  body {
+    min-height: 100%;
+    background-color: var(--color-mp-bg);
+    color: var(--color-mp-text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Skeleton (no decorative gradients — opacity pulse only) */
+@keyframes mp-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.mp-skeleton {
+  border-radius: var(--radius-mp);
+  background: rgba(255, 255, 255, 0.08);
+  animation: mp-skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+/* Live feed new row hint */
+@keyframes mp-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mp-feed-row {
+  animation: mp-slide-in 0.35s ease-out;
+}
