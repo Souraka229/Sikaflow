@@ -31,7 +31,7 @@ export default function LoginPage() {
           <div className="overflow-hidden rounded-[var(--radius-mp)] bg-[#DFFF00] p-6 sf-card-shadow-lg">
             <p className="text-sm font-bold text-black">Performance aperçu</p>
             <p className="mt-4 text-4xl font-bold tabular-nums text-black">{formatXof(90_744)}</p>
-            <p className="text-xs font-bold text-black/60">Volume indicatif (démo)</p>
+            <p className="text-xs font-bold text-black/60">Exemple sur 24 h</p>
             <div className="mt-4 grid grid-cols-2 gap-2">
               <div className="rounded-[var(--radius-mp-inner)] bg-white/90 p-3 sf-card-shadow">
                 <p className="text-[10px] font-bold uppercase text-mp-muted">Parse</p>

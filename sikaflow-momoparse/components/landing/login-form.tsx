@@ -2,42 +2,45 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { createClient } from "@/lib/supabase/client";
-import {
-  getSupabaseAuthMissingMessage,
-  getSupabaseDemoLoginHint,
-  isDevDemoWithoutSupabase,
-  isSupabaseAuthConfigured,
-} from "@/lib/supabase/auth-env";
+import { useSupabaseBrowser } from "@/components/supabase/supabase-browser-provider";
+import { USER_MSG_AUTH_UNAVAILABLE } from "@/lib/supabase/auth-env";
 
 export function LoginForm() {
   const router = useRouter();
+  const { ready, configured, client } = useSupabaseBrowser();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string>("");
+
+  /** En local uniquement : accès dashboard sans DB si l’API config ne renvoie rien. */
+  const allowDevDemo = process.env.NODE_ENV === "development" && ready && !configured;
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
     setPending(true);
 
-    try {
-      if (!isSupabaseAuthConfigured()) {
-        if (!isDevDemoWithoutSupabase()) {
-          setError(getSupabaseAuthMissingMessage());
-          setPending(false);
-          return;
-        }
+    if (!ready) {
+      setPending(false);
+      return;
+    }
+
+    if (!configured || !client) {
+      if (allowDevDemo) {
         router.push("/dashboard");
         setPending(false);
         return;
       }
+      setError(USER_MSG_AUTH_UNAVAILABLE);
+      setPending(false);
+      return;
+    }
 
+    try {
       const formData = new FormData(e.currentTarget);
       const email = formData.get("email") as string;
       const password = formData.get("password") as string;
 
-      const supabase = createClient();
-      const { error: authError } = await supabase.auth.signInWithPassword({
+      const { error: authError } = await client.auth.signInWithPassword({
         email,
         password,
       });
@@ -54,6 +57,14 @@ export function LoginForm() {
       setPending(false);
     }
   }
+
+  const footerHint = !ready
+    ? "Chargement de la configuration…"
+    : configured
+      ? "Utilisez vos identifiants pour accéder au tableau de bord."
+      : allowDevDemo
+        ? "Mode démo (dev) : sans base configurée, la connexion ouvre le tableau de bord sans vérifier le mot de passe."
+        : USER_MSG_AUTH_UNAVAILABLE;
 
   return (
     <>
@@ -105,10 +116,10 @@ export function LoginForm() {
         </div>
         <button
           type="submit"
-          disabled={pending}
+          disabled={pending || !ready}
           className="mt-2 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#DFFF00] px-6 text-sm font-bold text-black transition-colors hover:bg-[#c8e600] disabled:opacity-70"
         >
-          {pending ? "Connexion…" : "Se connecter"}
+          {!ready ? "Chargement…" : pending ? "Connexion…" : "Se connecter"}
         </button>
       </form>
 
@@ -150,7 +161,7 @@ export function LoginForm() {
       </button>
 
       <p className="rounded-[var(--radius-mp-inner)] border border-mp-border bg-mp-bg px-3 py-2 text-center text-[11px] font-medium text-mp-muted">
-        {getSupabaseDemoLoginHint()}
+        {footerHint}
       </p>
     </>
   );

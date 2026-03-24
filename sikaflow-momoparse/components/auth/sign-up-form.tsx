@@ -2,14 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { createClient } from "@/lib/supabase/client";
-import {
-  getSupabaseAuthMissingMessage,
-  isSupabaseAuthConfigured,
-} from "@/lib/supabase/auth-env";
+import { useSupabaseBrowser } from "@/components/supabase/supabase-browser-provider";
+import { USER_MSG_SIGNUP_UNAVAILABLE } from "@/lib/supabase/auth-env";
 
 export function SignUpForm() {
   const router = useRouter();
+  const { ready, configured, client } = useSupabaseBrowser();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string>("");
 
@@ -18,8 +16,19 @@ export function SignUpForm() {
     setError("");
     setPending(true);
 
-    if (!isSupabaseAuthConfigured()) {
-      setError(getSupabaseAuthMissingMessage());
+    if (!ready) {
+      setPending(false);
+      return;
+    }
+
+    if (!configured || !client) {
+      if (process.env.NODE_ENV === "development") {
+        setError(
+          "En développement : ajoutez l’URL et la clé publique Supabase dans .env.local (voir .env.example), puis redémarrez.",
+        );
+      } else {
+        setError(USER_MSG_SIGNUP_UNAVAILABLE);
+      }
       setPending(false);
       return;
     }
@@ -42,8 +51,7 @@ export function SignUpForm() {
         return;
       }
 
-      const supabase = createClient();
-      const { error: authError } = await supabase.auth.signUp({
+      const { error: authError } = await client.auth.signUp({
         email,
         password,
         options: {
@@ -146,10 +154,10 @@ export function SignUpForm() {
         </div>
         <button
           type="submit"
-          disabled={pending}
+          disabled={pending || !ready}
           className="mt-2 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#DFFF00] px-6 text-sm font-bold text-black transition-colors hover:bg-[#c8e600] disabled:opacity-70"
         >
-          {pending ? "Création en cours…" : "Créer un compte"}
+          {!ready ? "Chargement…" : pending ? "Création en cours…" : "Créer un compte"}
         </button>
       </form>
     </>

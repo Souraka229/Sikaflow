@@ -99,42 +99,34 @@ export function isDevDemoWithoutSupabase(): boolean {
   return process.env.NODE_ENV === "development" && !isSupabaseAuthConfigured();
 }
 
+/** Message utilisateur final (pas de jargon Vercel / NEXT_PUBLIC). */
+export const USER_MSG_AUTH_UNAVAILABLE =
+  "Connexion indisponible pour le moment. Réessayez plus tard.";
+
+export const USER_MSG_SIGNUP_UNAVAILABLE =
+  "Inscription indisponible pour le moment. Réessayez plus tard.";
+
 /**
- * Instructions quand Supabase n’est pas configuré.
- * En production, ne pas citer `.env.local` (inexistant sur Vercel) ; rappeler le redeploy après NEXT_PUBLIC_*.
+ * Détail pour logs / erreurs serveur (Server Components, API). Les écrans utilisateur passent par `/api/config/supabase-public`.
  */
 export function getSupabaseAuthMissingMessage(): string {
+  const hints = getSupabaseEnvRenameHints();
+  const hint = hints.length ? ` Renommages conseillés : ${hints.join(" ; ")}.` : "";
   if (process.env.NODE_ENV === "development") {
-    const typo = getSupabaseEnvRenameHints();
-    const typoLine =
-      typo.length > 0
-        ? ` Vous avez des variables en SUPERBASE : ${typo.join(" ; ")}.`
-        : "";
     return (
-      "Supabase n’est pas configuré. Ajoutez l’URL et une clé publique : " +
-      "NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_ANON_KEY (ou PUBLISHABLE_KEY), " +
-      "ou bien SUPABASE_URL + SUPABASE_ANON_KEY (le build les recopie pour le client). " +
-      "Orthographe SUPABASE (avec P), pas SUPERBASE." +
-      typoLine +
-      " (voir .env.example), puis redémarrez le serveur de développement."
+      "[dev] Supabase incomplet : URL + clé publique (anon ou publishable). Voir .env.example." + hint
     );
   }
-  return (
-    "L’inscription et la connexion par compte ne sont pas actives sur ce déploiement : " +
-    "aucune URL / clé publique détectée pour le build. " +
-    "Sur Vercel : NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_ANON_KEY ou NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, " +
-    "ou seulement SUPABASE_URL + SUPABASE_ANON_KEY (sans NEXT_PUBLIC) — le projet recopie ces valeurs au build. " +
-    "Vérifiez l’orthographe SUPABASE (avec P), pas SUPERBASE. Redéployez après modification."
-  );
+  return "[serveur] Configuration Supabase incomplète (URL + clé publique). Vérifier les variables d’environnement et redéployer." + hint;
 }
 
-/** Texte court sous le formulaire de connexion. */
+/** @deprecated Utiliser USER_MSG_* + useSupabaseBrowser sur les formulaires client. */
 export function getSupabaseDemoLoginHint(): string {
   if (isSupabaseAuthConfigured()) {
-    return "Utilisez vos identifiants Supabase pour accéder au tableau de bord.";
+    return "Utilisez vos identifiants pour accéder au tableau de bord.";
   }
   if (isDevDemoWithoutSupabase()) {
-    return "Mode démo (dev uniquement) : sans Supabase dans .env.local, « Se connecter » ouvre le tableau de bord sans vérifier email/mot de passe.";
+    return "Mode démo (dev) : sans Supabase, la connexion ouvre le tableau de bord sans mot de passe.";
   }
-  return "La connexion nécessite l’URL Supabase et une clé publique (NEXT_PUBLIC_* ou SUPABASE_URL + SUPABASE_ANON_KEY), puis un redéploiement.";
+  return USER_MSG_AUTH_UNAVAILABLE;
 }

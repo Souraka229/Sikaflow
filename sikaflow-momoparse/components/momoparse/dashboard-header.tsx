@@ -4,18 +4,17 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { PlanBadge } from "@/components/momoparse/badge";
-import { createClient } from "@/lib/supabase/client";
-import { isSupabaseAuthConfigured } from "@/lib/supabase/auth-env";
+import { useSupabaseBrowser } from "@/components/supabase/supabase-browser-provider";
 
 export function DashboardHeader({ plan = "PRO" }: { plan?: "PRO" | "FREE" }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  const { client } = useSupabaseBrowser();
 
   async function handleLogout() {
-    if (isSupabaseAuthConfigured()) {
+    if (client) {
       try {
-        const supabase = createClient();
-        await supabase.auth.signOut();
+        await client.auth.signOut();
       } catch {
         /* ignore */
       }
