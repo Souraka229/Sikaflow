@@ -16,7 +16,7 @@ Plateforme **Next.js** pour transformer les SMS **Mobile Money** (MTN, Moov, Cel
 - **Dashboard** : vue d’ensemble (Bento), transactions, clés API, appareils, docs intégrées.
 - **API publique** : authentification `X-Api-Key`, CORS configurable, pagination par curseur, filtres (opérateur, type, statut, dates, référence).
 - **Santé** : `/api/health` (liveness), `/api/ready` (prêt pour la prod si clés configurées).
-- **PWA** : manifeste et icônes dans `public/icons/`.
+- **PWA** : manifeste, icônes, service worker (`public/sw.js`), tentative automatique de permission + abonnement push (VAPID) en mode installé.
 - **Observabilité** : Vercel Analytics & Speed Insights (voir `app/layout.tsx`).
 
 ---
@@ -74,8 +74,12 @@ cp .env.example .env.local
 | `SUPABASE_URL` | Non* | URL du projet Supabase. |
 | `SUPABASE_SERVICE_ROLE_KEY` | Non* | Clé **service role** : persistance `/api/v1` sur PostgreSQL + validation des clés créées dans le dashboard. |
 | `SIKAFLOW_DOCS_DEMO_KEY` | Non | Préremplit le champ clé du playground documentation. Éviter une clé de prod sur un repo public. |
+| `NEXT_PUBLIC_VAPID_PUBLIC_KEY` | Non* | Clé publique Web Push (PWA). *Requise pour enregistrer un abonnement push côté client. |
+| `VAPID_PRIVATE_KEY` / `VAPID_SUBJECT` | Non | Réservées à l’**envoi** des notifications depuis un backend (ex. `web-push`). |
 
 \* **Production** : configurez au moins `SIKAFLOW_API_*` **ou** `SUPABASE_SERVICE_ROLE_KEY` (sinon **503** sur l’API). Sans service role, l’API utilise un **store mémoire vide** (non durable).
+
+**PWA / push** : appliquer la migration `push_subscriptions` ; générer les clés avec `npx web-push generate-vapid-keys`.
 
 ---
 

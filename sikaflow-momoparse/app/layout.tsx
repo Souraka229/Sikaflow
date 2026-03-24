@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { PwaNotificationsAuto } from "@/components/pwa-notifications-auto";
 import { SupabaseBrowserProvider } from "@/components/supabase/supabase-browser-provider";
 import "./globals.css";
 
@@ -62,6 +63,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <SupabaseBrowserProvider>
           {children}
+          <PwaNotificationsAuto />
           <Analytics />
           <SpeedInsights />
         </SupabaseBrowserProvider>

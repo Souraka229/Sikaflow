@@ -1,6 +1,8 @@
 -- Supprime les transactions de démo historiques (si présentes).
+-- Utiliser id::text : si id est uuid, les littéraux txn_* ne sont pas des UUID valides
+-- (sinon Postgres lève 22P02). Avec ::text, on compare en texte : 0 ligne si schéma uuid uniquement.
 delete from public.sikaflow_transactions
-where id in (
+where id::text in (
   'txn_7f2a9c1e001',
   'txn_7f2a9c1e002',
   'txn_7f2a9c1e003',
