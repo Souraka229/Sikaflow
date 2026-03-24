@@ -32,6 +32,7 @@ export async function GET(request: Request, context: Ctx) {
     {
       headers: {
         "X-RateLimit-Remaining": String(auth.remaining),
+        "X-RateLimit-Reset": String(auth.resetAt),
       },
     }
   );

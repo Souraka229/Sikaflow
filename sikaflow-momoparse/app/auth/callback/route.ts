@@ -14,7 +14,16 @@ export async function GET(request: Request) {
 
   if (code) {
     const supabase = await createClient();
-    await supabase.auth.exchangeCodeForSession(code);
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    
+    if (error) {
+      const errorMessage = encodeURIComponent(
+        error.message || "Failed to authenticate. Please try again."
+      );
+      return NextResponse.redirect(
+        new URL(`/auth/error?message=${errorMessage}`, target.origin)
+      );
+    }
   }
 
   return NextResponse.redirect(new URL("/dashboard", target.origin));
